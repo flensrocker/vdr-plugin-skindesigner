@@ -68,6 +68,7 @@ OBJS = $(PLUGIN).o \
        displayreplay.o \
        displaytracks.o \
        displayvolume.o \
+       recfolderinfo.o \
        libcore/pixmapcontainer.o \
        libcore/fontmanager.o \
        libcore/imagecache.o \
