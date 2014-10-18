@@ -23,8 +23,9 @@ public:
     cString FullName;
     time_t  Latest;
     int     Count;
+    cString LatestFileName;
 
-    cFolderInfo(const char *Name, const char *FullName, time_t Latest, int Count);
+    cFolderInfo(const char *Name, const char *FullName, time_t Latest, int Count, const char *LatestFileName);
   };
 
   cRecordingsFolderInfo(cRecordings &Recordings);
