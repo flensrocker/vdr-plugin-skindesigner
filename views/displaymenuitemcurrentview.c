@@ -556,6 +556,7 @@ void cDisplayMenuItemCurrentRecordingView::Render(void) {
         if (folderInfo) {
             recDate = *DateString(folderInfo->Latest);
             recTime = *TimeString(folderInfo->Latest);
+            delete folderInfo;
         }
     } else {
         recDate = *(event->GetDateString());
