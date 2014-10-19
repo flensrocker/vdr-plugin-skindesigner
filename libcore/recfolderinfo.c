@@ -66,16 +66,20 @@ void cRecordingsFolderInfo::Rebuild(void)
   // re-get state with lock held
   _recordings.StateChanged(_recState);
   cFolderInfoIntern *info;
+  cString folder;
   for (cRecording *rec = _recordings.First(); rec; rec = _recordings.Next(rec)) {
+#if APIVERSNUM < 20102
       //cRecording::Folder() first available since VDR 2.1.2
-      cString folder("");
-      char *folderName = strdup(rec->Name());
-      if (char *s = strrchr(folderName, FOLDERDELIMCHAR))
-        folder = cString(folderName, s);
+      const char *recName = rec->Name();
+      if (const char *s = strrchr(recName, FOLDERDELIMCHAR))
+        folder = cString(recName, s);
+      else
+        folder = "";
+#else
+      folder = rec->Folder();
+#endif
       info = _root->Find(*folder, true);
-      //info = _root->Find(*rec->Folder(), true);
       info->Add(rec);
-      free(folderName);
       }
 }
 
