@@ -71,10 +71,12 @@ void cRecordingsFolderInfo::Rebuild(void)
 #if APIVERSNUM < 20102
       //cRecording::Folder() first available since VDR 2.1.2
       const char *recName = rec->Name();
-      if (const char *s = strrchr(recName, FOLDERDELIMCHAR))
-        folder = cString(recName, s);
+      if (const char *s = strrchr(recName, FOLDERDELIMCHAR)) {
+         folder = recName;
+         folder.Truncate(s - recName);
+         }
       else
-        folder = "";
+         folder = "";
 #else
       folder = rec->Folder();
 #endif
