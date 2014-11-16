@@ -29,7 +29,7 @@ export CFLAGS   = $(call PKGCFG,cflags)
 export CXXFLAGS = $(call PKGCFG,cxxflags)
 
 ifeq ($(wildcard ../libskindesigner),)
-  CXXFLAGS += $(shell pkg-config --cflags libskindesginer)
+  CXXFLAGS += $(shell pkg-config --cflags libskindesigner)
   LSD += $(shell pkg-config --libs libskindesigner)
 else
   INCLUDES += -I../
