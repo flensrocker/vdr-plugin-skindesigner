@@ -5,6 +5,7 @@ using namespace std;
 
 #include <string>
 #include <map>
+#include <vector>
 #include <vdr/osdbase.h>
 
 namespace libskindesigner {

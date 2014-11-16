@@ -1,12 +1,8 @@
 #ifndef __SKINDESIGNEROSDBASE_H
 #define __SKINDESIGNEROSDBASE_H
 
-#include <string>
-#include <vector>
-#include <map>
 #include <set>
 #include <sstream>
-#include <vdr/osdbase.h>
 #include <vdr/plugin.h>
 #include "services.h"
 
