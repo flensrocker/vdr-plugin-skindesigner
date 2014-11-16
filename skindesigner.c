@@ -8,11 +8,12 @@
 #include <getopt.h>
 #include <vdr/plugin.h>
 
+#include <libskindesigner/services.h>
+
 #define DEFINE_CONFIG 1
 #include "config.h"
 #include "designer.h"
 #include "setup.h"
-#include "services.h"
 
 #if defined(APIVERSNUM) && APIVERSNUM < 20000 
 #error "VDR-2.0.0 API version or greater is required!"
@@ -156,7 +157,7 @@ bool cPluginSkinDesigner::Service(const char *Id, void *Data) {
         return false;
 
     if (strcmp(Id, "RegisterPlugin") == 0) {
-        RegisterPlugin* call = (RegisterPlugin*) Data;
+        libskindesigner::RegisterPlugin* call = (libskindesigner::RegisterPlugin*) Data;
         if (call->menus.size() < 1) {
             esyslog("skindesigner: error - plugin without menus registered");
             return false;
@@ -165,7 +166,7 @@ bool cPluginSkinDesigner::Service(const char *Id, void *Data) {
         dsyslog("skindesigner: plugin %s has registered %d templates", call->name.c_str(), call->menus.size());
         return true;
     } else if (strcmp(Id, "GetDisplayMenu") == 0) {
-        GetDisplayMenu* call = (GetDisplayMenu*) Data;
+        libskindesigner::GetDisplayMenu* call = (libskindesigner::GetDisplayMenu*) Data;
         cSkin *current = Skins.Current();
         for (vector<cSkinDesigner*>::iterator skin = skins.begin(); skin != skins.end(); skin++) {
             if (*skin == current) {

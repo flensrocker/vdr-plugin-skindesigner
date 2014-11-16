@@ -10,9 +10,11 @@
 #include <vdr/plugin.h>
 #include "services.h"
 
+namespace libskindesigner {
+
 class cSkindesignerOsdItem : public cOsdItem {
 private:
-	cSDDisplayMenu *sdDisplayMenu;
+	ISDDisplayMenu *sdDisplayMenu;
 	map < string, string > stringTokens;
     map < string, int > intTokens;
     map < string, vector< map< string, string > > > loopTokens;
@@ -22,7 +24,7 @@ public:
     cSkindesignerOsdItem(const char *Text, eOSState State = osUnknown, bool Selectable = true);
     virtual ~cSkindesignerOsdItem();
     virtual void SetMenuItem(cSkinDisplayMenu *DisplayMenu, int Index, bool Current, bool Selectable);
-	void SetDisplayMenu(cSDDisplayMenu *sdDisplayMenu) { this->sdDisplayMenu = sdDisplayMenu; };
+	void SetDisplayMenu(ISDDisplayMenu *sdDisplayMenu) { this->sdDisplayMenu = sdDisplayMenu; };
     void AddStringToken(string key, string value);
 	void AddIntToken(string key, int value);
     void AddLoopToken(string loopName, map<string, string> &tokens);
@@ -34,7 +36,7 @@ private:
     bool init;
     bool displayText;
     string pluginName;
-	cSDDisplayMenu *sdDisplayMenu;
+	ISDDisplayMenu *sdDisplayMenu;
     string text;
     map < string, string > stringTokens;
     map < string, int > intTokens;
@@ -57,6 +59,8 @@ public:
     virtual ~cSkindesignerOsdMenu();
     virtual void Display(void);
 };
+
+}
 
 #endif // __SKINDESIGNEROSDBASE_H
 

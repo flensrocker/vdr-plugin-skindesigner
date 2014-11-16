@@ -4,7 +4,9 @@
 #include <map>
 #include <set>
 #include <sstream>
-#include "libskindesigner/skindesignerosdbase.h"
+#include <libskindesigner/skindesignerosdbase.h>
+
+using namespace libskindesigner;
 
 enum eMenus {
 	meListMain,

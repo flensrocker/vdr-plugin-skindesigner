@@ -5,6 +5,21 @@ using namespace std;
 
 #include <string>
 #include <map>
+#include <vdr/osdbase.h>
+
+namespace libskindesigner {
+
+enum eMenuType {
+    mtList,
+    mtText
+};
+
+class ISDDisplayMenu : public cSkinDisplayMenu {
+public:
+    virtual void SetPluginMenu(string name, int menu, int type, bool init) = 0;
+    virtual bool SetItemPlugin(map<string,string> *stringTokens, map<string,int> *intTokens, map<string,vector<map<string,string> > > *loopTokens, int Index, bool Current, bool Selectable) = 0;
+    virtual bool SetPluginText(map<string,string> *stringTokens, map<string,int> *intTokens, map<string,vector<map<string,string> > > *loopTokens) = 0;
+};
 
 /*********************************************************************
 * Data Structures for Service Calls
@@ -33,6 +48,9 @@ public:
 	};
 // in
 //out	
-	cSDDisplayMenu *displayMenu;
+	ISDDisplayMenu *displayMenu;
 };
+
+}
+
 #endif //__SKINDESIGNERSERVICES_H

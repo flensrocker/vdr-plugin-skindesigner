@@ -7,8 +7,8 @@
  */
 
 #include <vdr/plugin.h>
+#include <libskindesigner/services.h>
 #include "osdmenu.c"
-#include "libskindesigner/services.h"
 
 static const char *VERSION        = "0.0.1";
 static const char *DESCRIPTION    = "SkinDesigner Test Client";

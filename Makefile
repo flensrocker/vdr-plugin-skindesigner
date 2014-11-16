@@ -101,6 +101,19 @@ OBJS = $(PLUGIN).o \
 
 all: $(SOFILE) i18n
 
+### libskindesigner
+
+INCLUDES += -I.
+LSDDIR = libskindesigner
+LIBS += -L$(LSDDIR) -lskindesigner
+LSDLIB = $(LSDDIR)/libskindesigner.so
+
+$(LSDLIB):
+	$(MAKE) -C $(LSDDIR) all
+
+clean-$(LSDLIB):
+	$(MAKE) -C $(LSDDIR) clean
+
 ### Implicit rules:
 
 %.o: %.c
@@ -143,7 +156,7 @@ install-i18n: $(I18Nmsgs)
 
 ### Targets:
 
-$(SOFILE): $(OBJS)
+$(SOFILE): $(LSDLIB) $(OBJS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) $(LIBS) -o $@
 
 install-lib: $(SOFILE)
@@ -165,10 +178,12 @@ dist: $(I18Npo) clean
 	@-rm -rf $(TMPDIR)/$(ARCHIVE)
 	@mkdir $(TMPDIR)/$(ARCHIVE)
 	@cp -a * $(TMPDIR)/$(ARCHIVE)
-	@tar czf $(PACKAGE).tgz --exclude .git* --exclude *.o --exclude *.rej --exclude *.orig -C $(TMPDIR) $(ARCHIVE)
+	@tar czf $(PACKAGE).tgz --exclude .git* --exclude *.o --exclude *.rej --exclude *.orig --exclude libskindesigner --exclude skindesclient -C $(TMPDIR) $(ARCHIVE)
 	@-rm -rf $(TMPDIR)/$(ARCHIVE)
 	@echo Distribution package created as $(PACKAGE).tgz
+	$(MAKE) -C $(LSDDIR) dist
+	$(MAKE) -C skindesclient dist
 
-clean:
+clean: clean-$(LSDLIB)
 	@-rm -f $(PODIR)/*.mo $(PODIR)/*.pot
 	@-rm -f $(OBJS) $(DEPFILE) *.so *.tgz core* *~

@@ -28,6 +28,14 @@ TMPDIR ?= /tmp
 export CFLAGS   = $(call PKGCFG,cflags)
 export CXXFLAGS = $(call PKGCFG,cxxflags)
 
+ifeq ($(wildcard ../libskindesigner),)
+  CXXFLAGS += $(shell pkg-config --cflags libskindesginer)
+  LSD += $(shell pkg-config --libs libskindesigner)
+else
+  INCLUDES += -I../
+  LSD += -L../libskindesigner -lskindesigner
+endif
+
 ### The version number of VDR's plugin API:
 
 APIVERSION = $(call PKGCFG,apiversion)
@@ -53,8 +61,7 @@ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
 
 ### The object files (add further files here):
 
-OBJS = $(PLUGIN).o \
-       libskindesigner/skindesignerosdbase.o
+OBJS = $(PLUGIN).o
 
 ### The main target:
 
@@ -103,7 +110,7 @@ install-i18n: $(I18Nmsgs)
 ### Targets:
 
 $(SOFILE): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) -o $@
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) $(LSD) -o $@
 
 install-lib: $(SOFILE)
 	install -D $^ $(DESTDIR)$(LIBDIR)/$^.$(APIVERSION)
