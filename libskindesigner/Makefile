@@ -58,7 +58,7 @@ include $(SRCS:.c=.d)
 
 install-lib: $(TARGET_LIB)
 	install -D $^ $(DESTDIR)$(LIBDIR)/$^
-	@ln -s $^ $(DESTDIR)$(LIBDIR)/$(SONAME)
+	if [ -z "$(DESTDIR)" ] ; then ldconfig; fi
 
 install-includes:
 	@mkdir -p $(DESTDIR)$(INCDIR)/$(LIBNAME)
