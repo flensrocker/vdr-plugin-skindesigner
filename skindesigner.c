@@ -8,6 +8,8 @@
 #include <getopt.h>
 #include <vdr/plugin.h>
 
+#include <libvdrskinservice/skindesignerservices.h>
+
 #define DEFINE_CONFIG 1
 #include "config.h"
 #include "designer.h"
@@ -23,9 +25,12 @@ static const char *VERSION        = "0.0.5";
 static const char *DESCRIPTION    = "SkinDesigner";
 static const char *MAINMENUENTRY  = "Skin Designer";
 
-class cPluginSkinDesigner : public cPlugin {
+class cPluginSkinDesigner : public cPlugin, public skindesignerservice::ISkindesignerService {
 private:
     vector<cSkinDesigner*> skins;
+protected:
+    virtual bool OnRegisterPlugin(string name, map< int, string > menus);
+    virtual skindesignerservice::ISDDisplayMenu*  OnGetDisplayMenu();
 public:
     cPluginSkinDesigner(void);
     virtual ~cPluginSkinDesigner();
@@ -151,19 +156,35 @@ bool cPluginSkinDesigner::SetupParse(const char *Name, const char *Value) {
     return config.SetupParse(Name, Value);
 }
 
+bool cPluginSkinDesigner::OnRegisterPlugin(string name, map< int, string > menus)
+{
+    if (menus.size() < 1) {
+        esyslog("skindesigner: error - plugin without menus registered");
+        return false;
+    }
+    config.AddPlugin(name, menus);
+    dsyslog("skindesigner: plugin %s has registered %d templates", name.c_str(), menus.size());
+    return true;
+}
+
+skindesignerservice::ISDDisplayMenu*  cPluginSkinDesigner::OnGetDisplayMenu()
+{
+    cSkin *current = Skins.Current();
+    for (vector<cSkinDesigner*>::iterator skin = skins.begin(); skin != skins.end(); skin++) {
+        if (*skin == current) {
+            return (*skin)->GetDisplayMenu();
+        }
+    }
+    return NULL;
+}
+
 bool cPluginSkinDesigner::Service(const char *Id, void *Data) {
     if (Data == NULL)
         return false;
 
     if (strcmp(Id, "RegisterPlugin") == 0) {
         RegisterPlugin* call = (RegisterPlugin*) Data;
-        if (call->menus.size() < 1) {
-            esyslog("skindesigner: error - plugin without menus registered");
-            return false;
-        }
-        config.AddPlugin(call->name, call->menus);
-        dsyslog("skindesigner: plugin %s has registered %d templates", call->name.c_str(), call->menus.size());
-        return true;
+        return OnRegisterPlugin(call->name, call->menus);
     } else if (strcmp(Id, "GetDisplayMenu") == 0) {
         GetDisplayMenu* call = (GetDisplayMenu*) Data;
         cSkin *current = Skins.Current();

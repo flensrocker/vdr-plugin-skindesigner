@@ -52,6 +52,9 @@ LIBS += $(shell pkg-config --libs librsvg-2.0 cairo-png) -ljpeg
 
 LIBS += $(shell xml2-config --libs)
 
+INCLUDES += $(shell pkg-config --cflags libvdrskinservice)
+LIBS += $(shell pkg-config --libs libvdrskinservice)
+
 ### The object files:
 OBJS = $(PLUGIN).o \
        config.o \
