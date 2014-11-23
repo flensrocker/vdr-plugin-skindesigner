@@ -23,6 +23,7 @@ private:
     string fontFix;
     string fontOsd;
     string fontSml;
+    string osdLanguage;
     map < string, map < int, string > > plugins;
     map < string, map < int, string > >::iterator plugIt;
 public:
@@ -36,7 +37,6 @@ public:
     void ReadSkins(void);
     void InitSkinIterator(void) { skinIterator = skins.begin(); };
     bool GetSkin(string &skin);
-    void SetChannelLogoSize(void);
     void CheckDecimalPoint(void);
     void SetSkin(void);
     bool SkinChanged(void);
@@ -44,6 +44,7 @@ public:
     bool OsdSizeChanged(void);
     void SetOSDFonts(void);
     bool OsdFontsChanged(void);
+    bool OsdLanguageChanged(void);
     cString GetSkinRessourcePath(void);
     void AddPlugin(string name, map < int, string > &menus);
     void InitPluginIterator(void);
@@ -55,8 +56,6 @@ public:
     int limitLogoCache;
     int numLogosMax;
     int debugImageLoading;
-    int logoWidth;
-    int logoHeight;
     bool replaceDecPoint;
     char decPoint;
     vector<string> skins;

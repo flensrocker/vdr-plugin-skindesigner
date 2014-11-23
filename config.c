@@ -11,9 +11,6 @@ cDesignerConfig::cDesignerConfig() {
     limitLogoCache = 1;
     numLogosMax = 200;
     debugImageLoading = 0;
-    //default logo width and height
-    logoWidth = 268;
-    logoHeight = 200;
     replaceDecPoint = false;
     //settings for rerun display
     rerunAmount = 10;
@@ -26,6 +23,7 @@ cDesignerConfig::cDesignerConfig() {
     SetSkin();
     SetOSDSize();
     SetOSDFonts();
+    osdLanguage = Setup.OSDLanguage;
 }
 
 cDesignerConfig::~cDesignerConfig() {
@@ -84,12 +82,6 @@ bool cDesignerConfig::GetSkin(string &skin) {
     skin = *skinIterator;
     skinIterator++;
     return true;
-}
-
-void cDesignerConfig::SetChannelLogoSize(void) {
-    cImageLoader imgLoader;
-    imgLoader.DeterminateChannelLogoSize(logoWidth, logoHeight);
-    dsyslog("skindesigner: using %dx%d px as original channel logo size", logoWidth, logoHeight);
 }
 
 void cDesignerConfig::CheckDecimalPoint(void) {
@@ -164,6 +156,14 @@ bool cDesignerConfig::OsdFontsChanged(void) {
     if (changed)
         SetOSDFonts();
     return changed;
+}
+
+bool cDesignerConfig::OsdLanguageChanged(void) {
+    if (osdLanguage.compare(Setup.OSDLanguage)) {
+        osdLanguage = Setup.OSDLanguage;
+        return true;
+    }
+    return false;
 }
 
 cString cDesignerConfig::GetSkinRessourcePath(void) {

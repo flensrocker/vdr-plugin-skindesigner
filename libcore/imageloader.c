@@ -16,7 +16,6 @@ cImageLoader::~cImageLoader() {
 cImage *cImageLoader::CreateImage(int width, int height, bool preserveAspect) {
     if (!importer)
         return NULL;
-
     int w, h;
     importer->GetImageSize(w, h);
     if (width == 0)
@@ -91,43 +90,6 @@ bool cImageLoader::LoadImage(std::string Path, std::string FileName, std::string
     std::string imgFile = sstrImgFile.str();
     return LoadImage(imgFile.c_str());
 }
-
-void cImageLoader::DeterminateChannelLogoSize(int &width, int &height) {
-    cString logoPath;
-    cString logoPathSkin = cString::sprintf("%s%s/themes/%s/logos/", *config.skinPath, Setup.OSDSkin, Setup.OSDTheme);
-
-    if (FolderExists(*logoPathSkin))
-        logoPath = logoPathSkin;
-    else
-        logoPath = config.logoPath;
-
-    DIR *folder = NULL;
-    struct dirent *file;
-    folder = opendir(logoPath);
-    if (!folder)
-        return;
-
-    while ( (file = readdir(folder)) ) {
-        if (endswith(file->d_name, ".png") ||
-            endswith(file->d_name, ".svg")) {
-            std::stringstream filePath;
-            filePath << *logoPath << file->d_name;
-            if (LoadImage(filePath.str().c_str())) {
-                int logoWidth = 0;
-                int logoHeight = 0;
-                importer->GetImageSize(logoWidth, logoHeight);
-                if (logoWidth > 0 && logoHeight > 0) {
-                    width = logoWidth;
-                    height = logoHeight;
-                    delete(importer);
-                    importer = NULL;
-                    return;
-                }
-            }
-        }
-    }
-}
-
 
 //
 // Image importer for PNG

@@ -100,8 +100,8 @@ bool cSDDisplayMenu::SetItemEvent(const cEvent *Event, int Index, bool Current, 
     } 
     if (!channel && Event) {
         channel = Channels.GetByChannelID(Event->ChannelID());
-        rootView->SetChannel(channel);
     }
+    rootView->SetChannel(channel);
     cDisplayMenuListView *list = rootView->GetListView();
     if (!list)
         return false;

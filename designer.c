@@ -168,7 +168,7 @@ void cSkinDesigner::ListCustomTokens(void) {
 * PRIVATE FUNCTIONS
 *********************************************************************************/    
 void cSkinDesigner::Init(void) {
-    if (init || config.OsdSizeChanged() || config.SkinChanged()) {
+    if (init || config.OsdSizeChanged() || config.SkinChanged() || config.OsdLanguageChanged()) {
         
         if (init) {
             config.SetSkin();
@@ -177,7 +177,6 @@ void cSkinDesigner::Init(void) {
         }
         dsyslog("skindesigner: initializing skin %s", skin.c_str());
         
-        config.SetChannelLogoSize();
         config.CheckDecimalPoint();
         
         if (fontManager)

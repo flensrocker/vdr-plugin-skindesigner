@@ -25,8 +25,8 @@ cSDDisplayMessage::~cSDDisplayMessage() {
 void cSDDisplayMessage::SetMessage(eMessageType Type, const char *Text) {
     if (!doOutput)
         return;
+    messageView->ClearMessage();
     if (!Text) {
-        messageView->ClearMessage();
         return;
     }
     messageView->DrawMessage(Type, Text);

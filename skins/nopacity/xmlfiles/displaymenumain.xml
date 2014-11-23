@@ -38,7 +38,7 @@
         <area x="85%" y="28%" width="14%" height="60%" layer="2">
             <loop name="timers" x="0" y="0" orientation="vertical" columnwidth="100%" rowheight="{areaheight} / 4" overflow="cut">
                 <drawrectangle condition="{timers[recording]}" x="0" y="0" width="{columnwidth}" height="{rowheight} * 99 / 100" color="{clrTransRed}" />
-                <drawimage  cache="true" name="logo" imagetype="channellogo" path="{timers[channelid]}" height="{rowheight} / 2" align="center" y="5" />
+                <drawimage  cache="true" name="logo" imagetype="channellogo" path="{timers[channelid]}" width="98%" height="{rowheight} / 2" align="center" y="5" />
                 <drawtextbox x="5" y="{height(logo)}+2" width="{columnwidth}-10" align="center" maxlines="2" font="{vdrOsd}" fontsize="4%" color="{clrWhite}" text="{timers[title]}" />
                 <drawtext name="datetime" align="center" y="{rowheight}*84/100" font="{vdrOsd}" fontsize="4%" color="{clrWhite}" text="{timers[datetime]}" />
             </loop>

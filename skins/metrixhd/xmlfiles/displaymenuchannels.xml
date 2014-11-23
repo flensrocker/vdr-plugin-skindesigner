@@ -28,7 +28,7 @@
                 <fill condition="{separator}" color="{clrSemiTransBlack}" />
             </area>
             <area condition="not{separator}" x="1%" width="6%" layer="3">
-                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="10" height="100%" valign="center" />
+                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="0" width="100%" height="100%" valign="center" />
             </area>
             <areascroll condition="not{separator}" scrollelement="menutext" mode="forthandback" orientation="horizontal" delay="1000" scrollspeed="medium" x="7%" width="52%" layer="3">
                 <drawtext name="menutext" x="20" valign="center" font="{light}" fontsize="95%" color="{clrWhite}" text="{number} {name} - {sourcedescription}, Transp. {transponder}" />
@@ -84,7 +84,7 @@
         -->
         <currentelement delay="500" fadetime="0">
             <area x="63%" y="0" width="36%" height="85%" layer="2">
-                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="10" y="0" width="30%" />
+                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="10" y="0" width="30%" height="10%" />
                 <drawtext name="channame" align="right" y="{height(logo)}/2 - {height(channame)}/2" width="65%" font="{semibold}" fontsize="10%" color="{clrWhite}" text="{name}" />
                 <!-- now -->
                 <drawtext name="now" x="2%" y="{height(logo)}" width="96%" font="{semibold}" fontsize="8%" color="{clrWhite}" text="Now: {presenteventtitle}" />

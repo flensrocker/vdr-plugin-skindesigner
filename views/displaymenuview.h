@@ -51,7 +51,7 @@ private:
 public:
     cDisplayMenuSchedulesView(cTemplateView *tmplView, eMenuCategory menuCat, bool menuInit);
     virtual ~cDisplayMenuSchedulesView();
-    void SetChannel(const cChannel *channel) { this->channel = channel; };
+    void SetChannel(const cChannel *channel) { if (!this->channel) this->channel = channel; };
     const cChannel *GetChannel(void) { return channel; };
     bool DrawHeader(void);
 };

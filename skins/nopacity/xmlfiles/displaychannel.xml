@@ -23,7 +23,7 @@
     -->
     <channelinfo>
         <area x="2%" y="80%" width="14%" height="18%" layer="2">
-            <drawimage cache="true" imagetype="channellogo" path="{channelid}" height="98%" align="center" valign="center"/>
+            <drawimage cache="true" imagetype="channellogo" path="{channelid}" width="94%" height="94%" align="center" valign="center"/>
         </area>
         <area x="18%" y="74%" width="60%" height="6%" layer="2">
             <drawtext x="0" valign="center" font="{vdrOsd}" fontsize="95%" color="{clrWhite}" text="{channelnumber}  {channelname}" />
@@ -151,7 +151,7 @@
     -->
     <channelgroup>
         <area x="2%" y="80%" width="14%" height="18%" layer="2">
-            <drawimage condition="{sepexists}" imagetype="seplogo" path="{seppath}" height="98%" align="center" valign="center" />
+            <drawimage condition="{sepexists}" imagetype="seplogo" path="{seppath}" width="96%" height="96%" align="center" valign="center" />
             <drawimage condition="not{sepexists}" imagetype="icon" path="ico_channelsep" align="center" valign="center" width="{areaheight}*0.8" height="{areaheight}*0.8"/>
         </area>
         <area x="18%" y="82%" width="80%" height="10%" layer="2">

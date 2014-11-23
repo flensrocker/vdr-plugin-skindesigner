@@ -68,7 +68,7 @@
         -->
         <currentelement delay="500" fadetime="0">
             <area x="63%" y="0" width="36%" height="15%" layer="2">
-                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="10" y="0" height="100%" />
+                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="10" y="0" width="30%" height="100%" />
                 <drawtext name="channum" x="{width(logo)} + 20" y="{areaheight}/6" width="{areawidth} - {width(logo)} - 30" font="{light}" fontsize="40%" color="{clrWhite}" text="Channel No. {channelnumber}" />
                 <drawtext name="channame" x="{width(logo)} + 20" y="{areaheight}/3 + {areaheight}/6" width="{areawidth} - {width(logo)} - 30" font="{semibold}" fontsize="40%" color="{clrWhite}" text="{channelname}" />
             </area>

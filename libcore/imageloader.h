@@ -76,7 +76,6 @@ public:
     cImage *CreateImage(int width, int height, bool preserveAspect = true);
     bool LoadImage(std::string Path, std::string FileName, std::string Extension);
     bool LoadImage(const char *fullpath);
-    void DeterminateChannelLogoSize(int &width, int &height);
 };
 
 #endif //__NOPACITY_IMAGELOADER_H

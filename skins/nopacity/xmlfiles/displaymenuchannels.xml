@@ -35,7 +35,7 @@
             </area>
             <!-- channel logo -->
             <area condition="not{separator}" x="5" width="6%" layer="3">
-                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="0" height="100%" valign="center" />
+                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="0" width="100%" height="100%" valign="center" />
             </area>
             <!-- scrollable channel name -->
             <areascroll condition="not{separator}++not{current}" scrollelement="channelname" mode="forthandback" orientation="horizontal" delay="1000" scrollspeed="medium" x="7%" width="20%" layer="3">
@@ -104,7 +104,7 @@
             </area>
             <area x="32%" y="2%" width="67%" height="76%" layer="2">
                 <!-- Logo and Header -->
-                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="1%" y="1%" width="20%" />
+                <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="1%" y="1%" width="20%" height="15%" />
                 <drawtext name="channelname" x="23%" y="{height(logo)} * 3 / 10" font="{vdrOsd}" fontsize="10%" color="{clrWhite}" text="{number} - {name}" />
                 <drawtext x="23%" y="{posy(channelname)} + {height(channelname)}" font="{vdrOsd}" fontsize="7%" color="{clrWhite}" text="{sourcedescription}, {tr(transponder)} {transponder}" />
                 <!-- NOW -->

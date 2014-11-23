@@ -31,7 +31,7 @@
             <drawtext condition="{switching}" x="0" y="-10" font="{light}" fontsize="99%" color="{clrWhite}" text="{channelnumber}: {channelname}" />
         </area>
         <area x="0" y="80%" width="20%" height="20%" layer="3">
-            <drawimage cache="true" condition="{channellogoexists}" imagetype="channellogo" path="{channelid}" height="98%" align="center" valign="center" />
+            <drawimage cache="true" condition="{channellogoexists}" imagetype="channellogo" path="{channelid}" width="98%" height="98%" align="center" valign="center" />
             <drawtext condition="not{channellogoexists}" x="5" valign="center" font="{light}" fontsize="40%" color="{clrWhite}" text="{channelnumber}: {channelname}" />
         </area>
     </channelinfo>
@@ -150,7 +150,7 @@
     -->
     <channelgroup>
         <area x="0" y="80%" width="20%" height="20%" layer="2">
-            <drawimage condition="{sepexists}" imagetype="seplogo" path="{seppath}" height="98%" align="center" valign="center" />
+            <drawimage condition="{sepexists}" imagetype="seplogo" path="{seppath}" width="98%" height="98%" align="center" valign="center" />
             <drawimage condition="not{sepexists}" imagetype="icon" path="ico_channelsep" align="center" valign="center" width="{areaheight}*0.8" height="{areaheight}*0.8"/>
         </area>
         <area x="22%" y="85%" width="76%" height="10%" layer="2">

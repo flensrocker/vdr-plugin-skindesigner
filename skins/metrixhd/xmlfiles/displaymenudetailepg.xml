@@ -119,7 +119,7 @@
     -->
     <detailheader>
         <area x="1%" y="0" width="98%" height="20%" layer="3">
-            <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="0" height="80%" valign="center" />
+            <drawimage name="logo" imagetype="channellogo" path="{channelid}" x="0" width="15%" height="80%" valign="center" />
             <drawimage condition="{isseries}++{banneravailable}++not{epgpicavailable}" imagetype="image" path="{bannerpath}" x="{areawidth} - {areawidth}/3 - 10" valign="center" width="{areawidth}/3" height="{areawidth}/3 * {bannerheight} / {bannerwidth}"/>
             <drawimage condition="{ismovie}++{posteravailable}++not{epgpicavailable}" imagetype="image" path="{posterpath}" x="{areawidth} - {areaheight}*8/10" valign="center" width="{areaheight}*8 / 10 * {posterheight} / {posterwidth}" height="{areaheight}*8 / 10"/>
             <drawimage condition="{epgpicavailable}" imagetype="image" path="{epgpicpath}" x="{areawidth} - {areaheight}*8/10 * 174 / 130" valign="center" width="{areaheight}*8/10 * 174 / 130" height="{areaheight}*8 / 10"/>
@@ -284,7 +284,7 @@
     <tab condition="{hasreruns}" name="{tr(reruns)}" x="2%" y="20%" width="94%" height="65%" layer="2" scrollheight="{areaheight}/4">
         <drawtext align="center" y="0" name="title" font="{light}" fontsize="10%" color="{clrWhite}" text="{tr(rerunsof)} '{title}'" />
         <loop name="reruns" x="0" y="{height(title)} + 10" width="{areawidth}" orientation="vertical">
-            <drawimage name="logo" condition="{reruns[channellogoexists]}" imagetype="channellogo" path="{reruns[channelid]}" x="0" height="10%" />
+            <drawimage name="logo" condition="{reruns[channellogoexists]}" imagetype="channellogo" path="{reruns[channelid]}" x="0" width="10%" height="10%" />
             <drawtext name="channelname" condition="not{reruns[channellogoexists]}" x="-5" font="{light}" fontsize="10%" color="{clrWhite}" text="{reruns[channelname]}" />
             <drawtext condition="{reruns[channellogoexists]}" x="{width(logo)}+20" y="-5" width="{areawidth} - {width(logo)} - 20" font="{light}" fontsize="8%" color="{clrWhite}" text="{reruns[day]} {reruns[date]} {reruns[start]} - {reruns[stop]}: {reruns[title]}  {reruns[shorttext]}" />
             <drawtext condition="not{reruns[channellogoexists]}" x="{width(channelname)}+20" y="-5" width="{areawidth} - {width(logo)} - 20" font="{light}" fontsize="8%" color="{clrWhite}" text="{reruns[day]} {reruns[date]} {reruns[start]} - {reruns[stop]}: {reruns[title]}  {reruns[shorttext]}" />

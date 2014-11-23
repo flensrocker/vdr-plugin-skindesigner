@@ -133,8 +133,8 @@
 <!ATTLIST drawimage
   x CDATA #IMPLIED
   y CDATA #IMPLIED
-  width CDATA #IMPLIED
-  height CDATA #IMPLIED
+  width CDATA #REQUIRED
+  height CDATA #REQUIRED
   align (left|center|right) #IMPLIED
   valign (top|center|bottom) #IMPLIED
   imagetype (channellogo|seplogo|skinpart|menuicon|icon|image) #REQUIRED

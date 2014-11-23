@@ -305,24 +305,6 @@ bool cTemplateFunction::ReCalculateParameters(void) {
 void cTemplateFunction::CompleteParameters(void) {
     switch (type) {
         case ftDrawImage: {
-            //Calculate img size
-            if ((GetNumericParameter(ptImageType) == itChannelLogo)||(GetNumericParameter(ptImageType) == itSepLogo)) {
-                int logoWidthOrig = config.logoWidth;
-                int logoHeightOrig = config.logoHeight;
-                int logoWidth = GetNumericParameter(ptWidth);
-                int logoHeight = GetNumericParameter(ptHeight);
-                if (logoWidth <= 0 && logoHeight <= 0)
-                    break; 
-                if (logoWidth <= 0 && logoHeightOrig > 0) {
-                    logoWidth = logoHeight * logoWidthOrig / logoHeightOrig;
-                    numericParameters.erase(ptWidth);
-                    numericParameters.insert(pair<eParamType,int>(ptWidth, logoWidth));
-                } else if (logoHeight <= 0 && logoWidthOrig > 0) {
-                    logoHeight = logoWidth * logoHeightOrig / logoWidthOrig;
-                    numericParameters.erase(ptHeight);
-                    numericParameters.insert(pair<eParamType,int>(ptHeight, logoHeight));
-                }
-            }
             CalculateAlign(GetNumericParameter(ptWidth), GetNumericParameter(ptHeight));
             if (imgPath.size() == 0) {
                 imgPath = GetParameter(ptPath);

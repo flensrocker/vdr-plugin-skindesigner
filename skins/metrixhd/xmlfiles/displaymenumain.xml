@@ -159,7 +159,7 @@
         <area x="{areawidth}/8" y="75%" width="{areawidth}*0.875" height="25%" layer="2">
             <loop name="timers" x="0" y="0" orientation="horizontal" columnwidth="{areawidth}/7" rowheight="{areaheight}" overflow="cut">
                 <drawrectangle condition="{timers[recording]}" x="0" y="0" width="{columnwidth}-5" height="{rowheight}" color="{clrRed}" />
-                <drawimage  cache="true" name="logo" imagetype="channellogo" path="{timers[channelid]}" height="40%" align="center" y="10" />
+                <drawimage  cache="true" name="logo" imagetype="channellogo" path="{timers[channelid]}" width="{columnwidth}-15" height="40%" align="center" y="10" />
                 <drawtextbox x="5" y="{height(logo)} + 10" width="{columnwidth}-10" align="center" maxlines="2" font="{light}" fontsize="15%" color="{clrWhite}" text="{timers[title]}" />
                 <drawtext align="center" y="75%" font="{light}" fontsize="20%" color="{clrWhite}" text="{timers[datetime]}" />
             </loop>

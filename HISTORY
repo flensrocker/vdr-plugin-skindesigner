@@ -87,3 +87,10 @@ Version 0.0.5
 - added {newmails} Token in displaychannel statusinfo, mailbox plugin
   has to be installed
 - clearing displaymessage if it is called without text
+- changed handling of channel logos, width and height are now mandatory
+
+Version 0.0.6
+
+- fixed Bug that channel info was not shown when displaying reruns with
+  epgsearch
+- using VDRs OSD Language instead of system language

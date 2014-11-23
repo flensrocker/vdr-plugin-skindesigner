@@ -6,18 +6,7 @@ cGlobals::cGlobals(void) {
     fonts.insert(pair<string, string>("vdrOsd", Setup.FontOsd));
     fonts.insert(pair<string, string>("vdrFix", Setup.FontFix));
     fonts.insert(pair<string, string>("vdrSml", Setup.FontSml));
-
-    string loc = setlocale(LC_NAME, NULL);
-    size_t index = loc.find_first_of(".");
-    string langISO = "";
-    if (index > 0) {
-        langISO = loc.substr(0, index);
-    }
-    if (langISO.size() == 5) {
-        language = langISO.c_str();
-    } else {
-        language = "en_EN";
-    }
+    language = Setup.OSDLanguage;
     dsyslog("skindesigner: using language %s", language.c_str());
 }
 
