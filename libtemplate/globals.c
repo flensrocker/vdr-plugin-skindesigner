@@ -71,6 +71,9 @@ void cGlobals::Debug(void) {
     for (map <string, int>::iterator myInt = intVars.begin(); myInt != intVars.end(); myInt++) {
         dsyslog("skindesigner: Integer Variable \"%s\": %d", (myInt->first).c_str(), myInt->second);
     }
+    for (map <string, double>::iterator myDouble = doubleVars.begin(); myDouble != doubleVars.end(); myDouble++) {
+        dsyslog("skindesigner: Double Variable \"%s\": %f", (myDouble->first).c_str(), myDouble->second);
+    }
     for (map <string, string>::iterator myStr = stringVars.begin(); myStr != stringVars.end(); myStr++) {
         dsyslog("skindesigner: String Variable \"%s\": \"%s\"", (myStr->first).c_str(), (myStr->second).c_str());
     }

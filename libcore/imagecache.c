@@ -46,25 +46,24 @@ void cImageCache::CacheLogo(int width, int height) {
     if (width == 0 || height == 0)
         return;
     
-    int channelsCached = 0;     
+    int logosCached = 0;     
     
     for (const cChannel *channel = Channels.First(); channel; channel = Channels.Next(channel)) {
-        if (channelsCached >= config.numLogosPerSizeInitial)
+        if (logosCached >= config.numLogosPerSizeInitial)
             break;
         if (channel->GroupSep()) {
             continue;
         }
+        stringstream logoName;
+        logoName << *channel->GetChannelID().ToString() << "_" << width << "x" << height;
+        map<string, cImage*>::iterator hit = channelLogoCache.find(logoName.str());
+        if (hit != channelLogoCache.end()) {
+            continue;
+        }
         bool success = LoadLogo(channel);
         if (success) {
-            channelsCached++;
+            logosCached++;
             cImage *image = CreateImage(width, height);
-            stringstream logoName;
-            logoName << *channel->GetChannelID().ToString() << "_" << width << "x" << height;
-            std::map<std::string, cImage*>::iterator hit = channelLogoCache.find(logoName.str());
-            if (hit != channelLogoCache.end()) {
-                delete image;
-                return;
-            }
             channelLogoCache.insert(pair<string, cImage*>(logoName.str(), image));
         }
     }
@@ -158,13 +157,7 @@ bool cImageCache::SeparatorLogoExists(string name) {
 void cImageCache::CacheIcon(eImageType type, string name, int width, int height) {
     if (width < 1 || width > 1920 || height < 1 || height > 1080)
         return;
-    bool success = LoadIcon(type, name);
-    if (!success) 
-        return;
-    stringstream iconName;
-    iconName << name << "_" << width << "x" << height;
-    cImage *image = CreateImage(width, height, true);
-    iconCache.insert(pair<string, cImage*>(iconName.str(), image));
+    GetIcon(type, name, width, height);
 }
 
 cImage *cImageCache::GetIcon(eImageType type, string name, int width, int height) {
@@ -281,13 +274,7 @@ bool cImageCache::MenuIconExists(string name) {
 void cImageCache::CacheSkinpart(string name, int width, int height) {
     if (width < 1 || width > 1920 || height < 1 || height > 1080)
         return;
-    bool success = LoadSkinpart(name);
-    if (!success) 
-        return;
-    stringstream iconName;
-    iconName << name << "_" << width << "x" << height;
-    cImage *image = CreateImage(width, height, false);
-    skinPartsCache.insert(pair<string, cImage*>(iconName.str(), image));
+    GetSkinpart(name, width, height);
 }
 
 cImage *cImageCache::GetSkinpart(string name, int width, int height) {

@@ -5,6 +5,7 @@
 #include "../libcore/helpers.h"
 
 cDisplayReplayView::cDisplayReplayView(cTemplateView *tmplView) : cView(tmplView) {
+    onPauseView = NULL;
     lastDate = "";
     numMarksLast = 0;
     lastMarks = NULL;
@@ -16,6 +17,9 @@ cDisplayReplayView::cDisplayReplayView(cTemplateView *tmplView) : cView(tmplView
 cDisplayReplayView::~cDisplayReplayView() {
     if (lastMarks) {
         delete[] lastMarks;
+    }
+    if (onPauseView) {
+        delete onPauseView;
     }
     CancelSave();
     FadeOut();
@@ -367,6 +371,22 @@ void cDisplayReplayView::DrawMessage(eMessageType type, const char *text) {
     
     ClearViewElement(veMessage);
     DrawViewElement(veMessage, &stringTokens, &intTokens);
+}
+
+void cDisplayReplayView::DrawOnPause(bool modeOnly) {
+    eViewElement veTmplOnPause = modeOnly ? veOnPauseModeOnly : veOnPause;
+    cTemplateViewElement *tmplOnPause = tmplView->GetViewElement(veTmplOnPause);
+    if (!tmplOnPause)
+        return;
+    onPauseView = new cDisplayReplayOnPauseView(tmplOnPause);
+    onPauseView->Start();
+}
+
+void cDisplayReplayView::ClearOnPause(void) {
+    if (onPauseView) {
+        delete onPauseView;
+        onPauseView = NULL;
+    }
 }
 
 /****************************************************************************************

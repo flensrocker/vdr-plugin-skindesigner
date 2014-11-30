@@ -60,6 +60,8 @@ enum eViewElement {
     veControlIconsModeOnly,
     veBackgroundModeOnly,
     veRecJump,
+    veOnPause,
+    veOnPauseModeOnly,
     //DisplayVolume ViewElements
     veVolume
 };
@@ -93,8 +95,7 @@ public:
     void InitIterator(void);
     cTemplatePixmap *GetNextPixmap(void);
     cTemplateFunction *GetFunction(string name);
-    void ActivateDebugTokens(void) {debugTokens = true; };
-    bool DebugTokens(void) { return debugTokens; };
+    bool DebugTokens(void);
     virtual void Debug(void);
 };
 

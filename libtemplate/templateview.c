@@ -469,8 +469,15 @@ void cTemplateView::Debug(void) {
 
 void cTemplateView::SetFunctionDefinitions(void) {
     
-    string name = "area";
+    string name = "viewelement";
     set<string> attributes;
+    attributes.insert("debug");
+    attributes.insert("delay");
+    attributes.insert("fadetime");
+    funcsAllowed.insert(pair< string, set<string> >(name, attributes));
+
+    name = "area";
+    attributes.clear();
     attributes.insert("debug");
     attributes.insert("condition");
     attributes.insert("x");
@@ -723,7 +730,7 @@ string cTemplateViewChannel::GetViewElementName(eViewElement ve) {
     return name;
 }
 
-void cTemplateViewChannel::AddPixmap(string sViewElement, cTemplatePixmap *pix, bool debugViewElement) {
+void cTemplateViewChannel::AddPixmap(string sViewElement, cTemplatePixmap *pix, vector<pair<string, string> > &viewElementattributes) {
     eViewElement ve = veUndefined;
     
     if (!sViewElement.compare("background")) {
@@ -770,10 +777,9 @@ void cTemplateViewChannel::AddPixmap(string sViewElement, cTemplatePixmap *pix, 
     map < eViewElement, cTemplateViewElement* >::iterator hit = viewElements.find(ve);
     if (hit == viewElements.end()) {
         cTemplateViewElement *viewElement = new cTemplateViewElement();
+        viewElement->SetParameters(viewElementattributes);
         viewElement->AddPixmap(pix);
         viewElements.insert(pair< eViewElement, cTemplateViewElement*>(ve, viewElement));
-        if (debugViewElement)
-            viewElement->ActivateDebugTokens();
     } else {
         (hit->second)->AddPixmap(pix);
     }
@@ -1192,7 +1198,7 @@ void cTemplateViewMenu::AddPluginView(string plugName, int templNo, cTemplateVie
     }
 }
 
-void cTemplateViewMenu::AddPixmap(string sViewElement, cTemplatePixmap *pix, bool debugViewElement) {
+void cTemplateViewMenu::AddPixmap(string sViewElement, cTemplatePixmap *pix, vector<pair<string, string> > &viewElementattributes) {
     eViewElement ve = veUndefined;
     
     if (!sViewElement.compare("background")) {
@@ -1231,10 +1237,9 @@ void cTemplateViewMenu::AddPixmap(string sViewElement, cTemplatePixmap *pix, boo
     map < eViewElement, cTemplateViewElement* >::iterator hit = viewElements.find(ve);
     if (hit == viewElements.end()) {
         cTemplateViewElement *viewElement = new cTemplateViewElement();
+        viewElement->SetParameters(viewElementattributes);
         viewElement->AddPixmap(pix);
         viewElements.insert(pair< eViewElement, cTemplateViewElement*>(ve, viewElement));
-        if (debugViewElement)
-            viewElement->ActivateDebugTokens();
     } else {
         (hit->second)->AddPixmap(pix);
     }
@@ -1309,7 +1314,7 @@ string cTemplateViewMessage::GetViewElementName(eViewElement ve) {
     return name;
 }
 
-void cTemplateViewMessage::AddPixmap(string sViewElement, cTemplatePixmap *pix, bool debugViewElement) {
+void cTemplateViewMessage::AddPixmap(string sViewElement, cTemplatePixmap *pix, vector<pair<string, string> > &viewElementattributes) {
     eViewElement ve = veUndefined;
     
     if (!sViewElement.compare("background")) {
@@ -1328,10 +1333,9 @@ void cTemplateViewMessage::AddPixmap(string sViewElement, cTemplatePixmap *pix, 
     map < eViewElement, cTemplateViewElement* >::iterator hit = viewElements.find(ve);
     if (hit == viewElements.end()) {
         cTemplateViewElement *viewElement = new cTemplateViewElement();
+        viewElement->SetParameters(viewElementattributes);
         viewElement->AddPixmap(pix);
         viewElements.insert(pair< eViewElement, cTemplateViewElement*>(ve, viewElement));
-        if (debugViewElement)
-            viewElement->ActivateDebugTokens();
     } else {
         (hit->second)->AddPixmap(pix);
     }
@@ -1357,6 +1361,14 @@ cTemplateViewReplay::cTemplateViewReplay(void) {
     attributes.insert("scaletvheight");
     funcsAllowed.insert(pair< string, set<string> >(viewName, attributes));
 
+    //definition of allowed parameters for onpause and onpausemodeonly viewelement 
+    attributes.clear();
+    attributes.insert("debug");
+    attributes.insert("delay");
+    attributes.insert("fadetime");
+    funcsAllowed.insert(pair< string, set<string> >("onpause", attributes));
+    funcsAllowed.insert(pair< string, set<string> >("onpausemodeonly", attributes));
+
     SetViewElements();
 }
 
@@ -1378,6 +1390,8 @@ void cTemplateViewReplay::SetViewElements(void) {
     viewElementsAllowed.insert("controliconsmodeonly");
     viewElementsAllowed.insert("jump");
     viewElementsAllowed.insert("message");
+    viewElementsAllowed.insert("onpause");
+    viewElementsAllowed.insert("onpausemodeonly");
 }
 
 string cTemplateViewReplay::GetViewElementName(eViewElement ve) {
@@ -1422,6 +1436,12 @@ string cTemplateViewReplay::GetViewElementName(eViewElement ve) {
         case veScraperContent:
             name = "Scraper Content";
             break;
+        case veOnPause:
+            name = "On Pause";
+            break;
+        case veOnPauseModeOnly:
+            name = "On Pause Mode Only";
+            break;
         default:
             name = "Unknown";
             break;
@@ -1429,7 +1449,7 @@ string cTemplateViewReplay::GetViewElementName(eViewElement ve) {
     return name;
 }
 
-void cTemplateViewReplay::AddPixmap(string sViewElement, cTemplatePixmap *pix, bool debugViewElement) {
+void cTemplateViewReplay::AddPixmap(string sViewElement, cTemplatePixmap *pix, vector<pair<string, string> > &viewElementattributes) {
     eViewElement ve = veUndefined;
     
     if (!sViewElement.compare("background")) {
@@ -1460,6 +1480,10 @@ void cTemplateViewReplay::AddPixmap(string sViewElement, cTemplatePixmap *pix, b
         ve = veRecJump;
     } else if (!sViewElement.compare("message")) {
         ve = veMessage;
+    } else if (!sViewElement.compare("onpause")) {
+        ve = veOnPause;
+    } else if (!sViewElement.compare("onpausemodeonly")) {
+        ve = veOnPauseModeOnly;
     }
 
     if (ve == veUndefined) {
@@ -1472,10 +1496,9 @@ void cTemplateViewReplay::AddPixmap(string sViewElement, cTemplatePixmap *pix, b
     map < eViewElement, cTemplateViewElement* >::iterator hit = viewElements.find(ve);
     if (hit == viewElements.end()) {
         cTemplateViewElement *viewElement = new cTemplateViewElement();
+        viewElement->SetParameters(viewElementattributes);
         viewElement->AddPixmap(pix);
         viewElements.insert(pair< eViewElement, cTemplateViewElement*>(ve, viewElement));
-        if (debugViewElement)
-            viewElement->ActivateDebugTokens();
     } else {
         (hit->second)->AddPixmap(pix);
     }
@@ -1529,7 +1552,7 @@ string cTemplateViewVolume::GetViewElementName(eViewElement ve) {
     return name;
 }
 
-void cTemplateViewVolume::AddPixmap(string sViewElement, cTemplatePixmap *pix, bool debugViewElement) {
+void cTemplateViewVolume::AddPixmap(string sViewElement, cTemplatePixmap *pix, vector<pair<string, string> > &viewElementattributes) {
     eViewElement ve = veUndefined;
     
     if (!sViewElement.compare("background")) {
@@ -1548,10 +1571,9 @@ void cTemplateViewVolume::AddPixmap(string sViewElement, cTemplatePixmap *pix, b
     map < eViewElement, cTemplateViewElement* >::iterator hit = viewElements.find(ve);
     if (hit == viewElements.end()) {
         cTemplateViewElement *viewElement = new cTemplateViewElement();
+        viewElement->SetParameters(viewElementattributes);
         viewElement->AddPixmap(pix);
         viewElements.insert(pair< eViewElement, cTemplateViewElement*>(ve, viewElement));
-        if (debugViewElement)
-            viewElement->ActivateDebugTokens();
     } else {
         (hit->second)->AddPixmap(pix);
     }
@@ -1634,7 +1656,7 @@ string cTemplateViewAudioTracks::GetViewListName(eViewList vl) {
     return name;
 }
 
-void cTemplateViewAudioTracks::AddPixmap(string sViewElement, cTemplatePixmap *pix, bool debugViewElement) {
+void cTemplateViewAudioTracks::AddPixmap(string sViewElement, cTemplatePixmap *pix, vector<pair<string, string> > &viewElementattributes) {
     eViewElement ve = veUndefined;
     
     if (!sViewElement.compare("background")) {
@@ -1653,10 +1675,9 @@ void cTemplateViewAudioTracks::AddPixmap(string sViewElement, cTemplatePixmap *p
     map < eViewElement, cTemplateViewElement* >::iterator hit = viewElements.find(ve);
     if (hit == viewElements.end()) {
         cTemplateViewElement *viewElement = new cTemplateViewElement();
+        viewElement->SetParameters(viewElementattributes);
         viewElement->AddPixmap(pix);
         viewElements.insert(pair< eViewElement, cTemplateViewElement*>(ve, viewElement));
-        if (debugViewElement)
-            viewElement->ActivateDebugTokens();
     } else {
         (hit->second)->AddPixmap(pix);
     }

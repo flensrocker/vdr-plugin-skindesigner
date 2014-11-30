@@ -28,7 +28,7 @@ Requirements
 
 - cairo
 
-- librsvg-2
+- librsvg-2 >= 2.36.0
 
 - libxml2
 

@@ -249,7 +249,9 @@ void cDisplayMenuItemCurrentChannelView::Render(void) {
     intTokens.insert(pair<string,int>("frequency", channel->Frequency()));
 
     stringTokens.insert(pair<string,string>("name", channel->Name() ? channel->Name() : ""));
-    stringTokens.insert(pair<string,string>("channelid", *(channel->GetChannelID().ToString())));
+    string channelID = *(channel->GetChannelID().ToString());
+    stringTokens.insert(pair<string,string>("channelid", channelID));
+    intTokens.insert(pair<string, int>("channellogoexists", imgCache->LogoExists(channelID)));
 
     //Channel Source Information
     const cSource *source = Sources.Get(channel->Source());
@@ -456,11 +458,14 @@ void cDisplayMenuItemCurrentTimerView::Render(void) {
     const cChannel *channel = timer->Channel();
     if (channel) {
         stringTokens.insert(pair<string,string>("channelname", channel->Name() ? channel->Name() : ""));
-        stringTokens.insert(pair<string,string>("channelid", *(channel->GetChannelID().ToString())));
+        string channelID = *(channel->GetChannelID().ToString());
+        stringTokens.insert(pair<string,string>("channelid", channelID));
+        intTokens.insert(pair<string, int>("channellogoexists", imgCache->LogoExists(channelID)));
         intTokens.insert(pair<string,int>("channelnumber", channel->Number()));
     } else {
         stringTokens.insert(pair<string,string>("channelname", ""));
         stringTokens.insert(pair<string,string>("channelid", ""));
+        intTokens.insert(pair<string, int>("channellogoexists", 0));
         intTokens.insert(pair<string,int>("channelnumber", 0));        
     }
 

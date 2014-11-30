@@ -120,6 +120,7 @@
     {devices[signalquality]}    signalstrength of devcie
     {devices[channelnumber]}    number of the currently tuned channel
     {devices[channelname]}      name of the currently tuned channel
+    {devices[channellogoexists]} true if a channel logo exists 
     {devices[channelid]}        ID of the currently tuned channel
     {devices[source]}           source of the currently tuned channel
     -->

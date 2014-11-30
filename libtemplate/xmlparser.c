@@ -139,12 +139,13 @@ bool cXmlParser::ParseView(void) {
             node = node->next;
             continue;
         }
-
         if (view->ValidSubView((const char*)node->name)) {
             ParseSubView(node);
         } else if (view->ValidViewElement((const char*)node->name)) {
-            bool debugViewElement = DebugViewElement(node);
-            ParseViewElement(node->name, node->xmlChildrenNode, debugViewElement);
+            xmlAttrPtr attr = node->properties;
+            vector<pair<string, string> > attribs;
+            ParseAttributes(attr, node, attribs);
+            ParseViewElement(node->name, node->xmlChildrenNode, attribs);
         } else if (view->ValidViewList((const char*)node->name)) {
             ParseViewList(node);
         } else {
@@ -178,8 +179,8 @@ bool cXmlParser::ParsePluginView(string plugName, int templateNumber) {
         }
 
         if (plugView->ValidViewElement((const char*)childNode->name)) {
-            bool debugViewElement = DebugViewElement(childNode);
-            ParseViewElement(childNode->name, childNode->xmlChildrenNode, debugViewElement, plugView);
+            vector<pair<string, string> > attribs;
+            ParseViewElement(childNode->name, childNode->xmlChildrenNode, attribs, plugView);
         } else if (plugView->ValidViewList((const char*)childNode->name)) {
             ParseViewList(childNode, plugView);
         } else if (!xmlStrcmp(childNode->name, (const xmlChar *) "tab")) {
@@ -354,6 +355,11 @@ void cXmlParser::InsertVariable(string name, string type, string value) {
         int val = atoi(value.c_str());
         globals->intVars.insert(pair<string, int>(name, val));
     } else if (!type.compare("double")) {
+        if (config.replaceDecPoint) {
+            if (value.find_first_of('.') != string::npos) {
+                std::replace( value.begin(), value.end(), '.', config.decPoint);
+            }
+        }
         double val = atof(value.c_str());
         globals->doubleVars.insert(pair<string, double>(name, val));
     } else if (!type.compare("string")) {
@@ -508,8 +514,8 @@ bool cXmlParser::ParseSubView(xmlNodePtr node) {
         }
 
         if (subView->ValidViewElement((const char*)childNode->name)) {
-            bool debugViewElement = DebugViewElement(childNode);
-            ParseViewElement(childNode->name, childNode->xmlChildrenNode, debugViewElement, subView);
+            vector<pair<string, string> > attribs;
+            ParseViewElement(childNode->name, childNode->xmlChildrenNode, attribs, subView);
         } else if (subView->ValidViewList((const char*)childNode->name)) {
             ParseViewList(childNode, subView);
         } else if (!xmlStrcmp(childNode->name, (const xmlChar *) "tab")) {
@@ -527,16 +533,12 @@ bool cXmlParser::ParseSubView(xmlNodePtr node) {
 
 }
 
-void cXmlParser::ParseViewElement(const xmlChar * viewElement, xmlNodePtr node, bool debugVE, cTemplateView *subView) {
+void cXmlParser::ParseViewElement(const xmlChar * viewElement, xmlNodePtr node, vector<pair<string, string> > &attributes, cTemplateView *subView) {
     if (!node)
         return;
     
     if (!view)
         return;
-
-    if (debugVE) {
-        dsyslog("skindesigner: activating debugging of viewElement %s", (const char*)viewElement);
-    }
 
     while (node != NULL) {
 
@@ -562,9 +564,9 @@ void cXmlParser::ParseViewElement(const xmlChar * viewElement, xmlNodePtr node, 
         pix->SetParameters(attribs);
         ParseFunctionCalls(node->xmlChildrenNode, pix);
         if (subView)
-            subView->AddPixmap((const char*)viewElement, pix, debugVE);
+            subView->AddPixmap((const char*)viewElement, pix, attributes);
         else
-            view->AddPixmap((const char*)viewElement, pix, debugVE);
+            view->AddPixmap((const char*)viewElement, pix, attributes);
         
         node = node->next;
     }
@@ -601,15 +603,6 @@ void cXmlParser::ParseViewList(xmlNodePtr parentNode, cTemplateView *subView) {
             ParseAttributes(attrCur, node, attribsCur);
             currentElement->SetGlobals(globals);
             currentElement->SetParameters(attribsCur);
-            bool debugCurrent = false;
-            for (vector<pair<string, string> >::iterator it = attribsCur.begin(); it != attribsCur.end(); it++) {
-                if (!(it->first).compare("debug")) {
-                    debugCurrent = true;
-                    break;
-                }
-            }
-            if (debugCurrent)
-                currentElement->ActivateDebugTokens();
             while (childNode != NULL) {
                 if (childNode->type != XML_ELEMENT_NODE) {
                     childNode = childNode->next;
@@ -631,13 +624,15 @@ void cXmlParser::ParseViewList(xmlNodePtr parentNode, cTemplateView *subView) {
             }
             viewList->AddCurrentElement(currentElement);
         } else if (!xmlStrcmp(node->name, (const xmlChar *) "listelement")) {
-            bool debugViewList = DebugViewElement(node);
             xmlNodePtr childNode = node->xmlChildrenNode;
             if (!childNode)
                 continue;
             cTemplateViewElement *listElement = new cTemplateViewElement();
-            if (debugViewList)
-                listElement->ActivateDebugTokens();
+            xmlAttrPtr attrList = node->properties;
+            vector<pair<string, string> > attribsList;
+            ParseAttributes(attrList, node, attribsList);
+            listElement->SetGlobals(globals);
+            listElement->SetParameters(attribsList);
             while (childNode != NULL) {
                 if (childNode->type != XML_ELEMENT_NODE) {
                     childNode = childNode->next;
@@ -775,6 +770,7 @@ bool cXmlParser::ParseAttributes(xmlAttrPtr attr, xmlNodePtr node, vector<pair<s
         xmlChar *value = NULL;
         value = xmlGetProp(node, attr->name);
         if (!view->ValidAttribute((const char*)node->name, (const char*)attr->name)) {
+            esyslog("skindesigner: unknown attribute %s in %s", (const char*)attr->name, (const char*)node->name);
             attr = attr->next;
             if (value)
                 xmlFree(value);
@@ -787,17 +783,6 @@ bool cXmlParser::ParseAttributes(xmlAttrPtr attr, xmlNodePtr node, vector<pair<s
             xmlFree(value);
     }
     return true;
-}
-
-bool cXmlParser::DebugViewElement(xmlNodePtr node) {
-    xmlAttrPtr attr = node->properties;
-    vector<pair<string, string> > attribs;
-    ParseAttributes(attr, node, attribs);
-    for (vector<pair<string, string> >::iterator it = attribs.begin(); it != attribs.end(); it++) {
-        if (!(it->first).compare("debug"))
-            return true;
-    }
-    return false;
 }
 
 void cXmlParser::InitLibXML() {

@@ -104,7 +104,6 @@ vector< pair<string, int> > cTemplate::GetUsedFonts(void) {
 
 void cTemplate::CacheImages(void) {
     CacheImages(rootView);
-
     rootView->InitSubViewIterator();
     cTemplateView *subView = NULL;
     while(subView = rootView->GetNextSubView()) {
@@ -113,9 +112,7 @@ void cTemplate::CacheImages(void) {
 }
 
 void cTemplate::Debug(void) {
-
     rootView->Debug();
-
 }
 
 /*******************************************************************
@@ -213,13 +210,7 @@ void cTemplate::CacheImages(cTemplateView *view) {
         viewElement->InitIterator();
         cTemplatePixmap *pix = NULL;
         while(pix = viewElement->GetNextPixmap()) {
-            pix->InitIterator();
-            cTemplateFunction *func = NULL;
-            while(func = pix->GetNextFunction()) {
-                if (func->GetType() == ftDrawImage) {
-                    CacheImage(func);
-                }
-            }
+            CachePixmapImages(pix);
         }
     }
     //used images in viewLists pixmaps
@@ -229,38 +220,38 @@ void cTemplate::CacheImages(cTemplateView *view) {
         viewList->InitIterator();
         cTemplatePixmap *pix = NULL;
         while(pix = viewList->GetNextPixmap()) {
-            pix->InitIterator();
-            cTemplateFunction *func = NULL;
-            while(func = pix->GetNextFunction()) {
-                if (func->GetType() == ftDrawImage) {
-                    CacheImage(func);
-                }
-            }
+            CachePixmapImages(pix);
         }
         cTemplateViewElement *listElement = viewList->GetListElement();
         listElement->InitIterator();
         while(pix = listElement->GetNextPixmap()) {
-            pix->InitIterator();
-            cTemplateFunction *func = NULL;
-            while(func = pix->GetNextFunction()) {
-                if (func->GetType() == ftDrawImage) {
-                    CacheImage(func);
-                }
-            }
+            CachePixmapImages(pix);
+        }
+        cTemplateViewElement *currentElement = viewList->GetListElementCurrent();
+        if (!currentElement) {
+            continue;
+        }
+        currentElement->InitIterator();
+        while(pix = currentElement->GetNextPixmap()) {
+            CachePixmapImages(pix);
         }
     }
-    //used logos in viewTabs
+    //used images in viewTabs
     view->InitViewTabIterator();
     cTemplateViewTab *viewTab = NULL;
     while(viewTab = view->GetNextViewTab()) {
-        viewTab->InitIterator();
-        cTemplateFunction *func = NULL;
-        while(func = viewTab->GetNextFunction()) {
-            if (func->GetType() == ftDrawImage) {
-                CacheImage(func);
-            }
-        }
+        CachePixmapImages(viewTab);
     }    
+}
+
+void cTemplate::CachePixmapImages(cTemplatePixmap *pix) {
+    pix->InitIterator();
+    cTemplateFunction *func = NULL;
+    while(func = pix->GetNextFunction()) {
+        if (func->GetType() == ftDrawImage) {
+            CacheImage(func);
+        }
+    }
 }
 
 void cTemplate::CacheImage(cTemplateFunction *func) {

@@ -18,6 +18,7 @@
         <color name="clrGray">FF858585</color>
         <color name="clrBackground">B012273F</color>
         <color name="clrTransBlack">99000000</color>
+        <color name="clrTransBlackDark">CC000000</color>
         <color name="clrTransRed">99FF0000</color>
         <color name="clrFontMenuItem">FFFFFFFF</color>
         <color name="clrFontMenuItemSelected">FF363636</color>
@@ -187,6 +188,10 @@
         <token name="tr(volume)">
             <trans lang="en_EN">Volume</trans>
             <trans lang="de_DE">Lautstärke</trans>
+        </token>
+        <token name="tr(pause)">
+            <trans lang="en_EN">Pause</trans>
+            <trans lang="de_DE">Pause</trans>
         </token>
     </translations>
     <!--

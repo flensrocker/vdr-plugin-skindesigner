@@ -36,13 +36,12 @@ private:
     void ParseGlobalFonts(xmlNodePtr node);
     void ParseTranslations(xmlNodePtr node);
     bool ParseSubView(xmlNodePtr node);
-    void ParseViewElement(const xmlChar * viewElement, xmlNodePtr node, bool debugVE, cTemplateView *subView = NULL);
+    void ParseViewElement(const xmlChar * viewElement, xmlNodePtr node, vector<pair<string, string> > &attributes, cTemplateView *subView = NULL);
     void ParseViewList(xmlNodePtr parentNode, cTemplateView *subView = NULL);
     void ParseViewTab(xmlNodePtr parentNode, cTemplateView *subView);
     void ParseFunctionCalls(xmlNodePtr node, cTemplatePixmap *pix);
     void ParseLoopFunctionCalls(xmlNodePtr node, cTemplateLoopFunction *loopFunc);
     bool ParseAttributes(xmlAttrPtr attr, xmlNodePtr node, vector<pair<string, string> > &attribs);
-    bool DebugViewElement(xmlNodePtr node);
 public:
     cXmlParser(void);
     virtual ~cXmlParser(void);

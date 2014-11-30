@@ -35,6 +35,11 @@ void cSDDisplayReplay::SetRecording(const cRecording *Recording) {
 void cSDDisplayReplay::SetMode(bool Play, bool Forward, int Speed) {
     if (!doOutput)
         return;
+    if (!Play && Speed < 0) {
+        replayView->DrawOnPause(modeOnly);
+    } else {
+        replayView->ClearOnPause();
+    }
     replayView->DrawControlIcons(Play, Forward, Speed, modeOnly);
 }
 

@@ -1,3 +1,4 @@
+#include "../config.h"
 #include "parameter.h"
 
 using namespace std;
@@ -164,7 +165,13 @@ bool cNumericParameter::CheckExpression(int &val, string &parsedVal) {
             if (foundToken != string::npos) {
                 stringstream st;
                 st << globDouble->second;
-                parsedValue = parsedValue.replace(foundToken, token.size(), st.str());
+                string doubleVal = st.str();
+                if (config.replaceDecPoint) {
+                    if (doubleVal.find_first_of('.') != string::npos) {
+                        std::replace( doubleVal.begin(), doubleVal.end(), '.', config.decPoint);
+                    }
+                }
+                parsedValue = parsedValue.replace(foundToken, token.size(), doubleVal);
             }
         }
     }

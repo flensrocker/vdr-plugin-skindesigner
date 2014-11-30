@@ -215,4 +215,128 @@
         </area>
     </message>
 
+    <!-- Available Variables onpause and onpausemodeonly:
+    {name}                    title of recording
+    {shorttext}               shorttext of recording
+    {description}             description of recording
+    {date}                    date of recording in dd.mm.yy
+    {time}                    time of recording in hh:mm
+    {daynumeric}              day as number
+    {month}                   month as number
+    {year}                    year as number
+    {duration}                real duration of recording in minutes
+    {durationhours}           real duration, full hours
+    {durationminutes}         real duration, rest of minutes
+    {durationevent}           duration of corresponding event in minutes
+    {durationeventhours}      event duration, full hours
+    {durationeventminutes}    event duration, rest of minutes
+
+    {ismovie}                 true if event is scraped as a movie
+    Available variables for movies:
+    {movietitle}              movie title from themoviedb
+    {movieoriginalTitle}      movie original title from themoviedb
+    {movietagline}            movie tagline from themoviedb
+    {movieoverview}           movie overview from themoviedb
+    {movieadult}              true if movie is rated as adult
+    {moviebudget}             movie budget from themoviedb in $
+    {movierevenue}            movie revenue from themoviedb in $
+    {moviegenres}             movie genres from themoviedb
+    {moviehomepage}           movie homepage from themoviedb
+    {moviereleasedate}        movie release date from themoviedb
+    {movieruntime}            movie runtime from themoviedb
+    {moviepopularity}         movie popularity from themoviedb
+    {movievoteaverage}        movie vote average from themoviedb
+    {posterwidth}             width of scraped poster
+    {posterheight}            height of scraped poster
+    {posterpath}              absolute path of scraped poster
+    {fanartwidth}             width of scraped fanart
+    {fanartheight}            height of scraped fanart
+    {fanartpath}              absolute path of scraped fanart
+    {movieiscollection}       true if movie is part of a collection
+    {moviecollectionName}     name of movie collection
+    {collectionposterwidth}   width of scraped collection poster
+    {collectionposterheight}  height of scraped collection poster
+    {collectionposterpath}    absolute path of scraped collection poster
+    {collectionfanartwidth}   width of scraped collection fanart
+    {collectionfanartheight}  height of scraped collection fanart
+    {collectionfanartpath}    absolute path of scraped collection fanart
+    {actors[]}                array with movie actors
+    {actors[name]}            real name of actor
+    {actors[role]}            actor role
+    {actors[thumb]}           absolute path of scraped actor thumb
+    {actors[thumbwidth]}      width of scraped actor thumb
+    {actors[thumbheight]}     height of scraped actor thumb
+
+    {isseries}                true if event is scraped as a series
+    Available variables for series:
+    {seriesname}              name of series
+    {seriesoverview}          series overview
+    {seriesfirstaired}        first aired date 
+    {seriesnetwork}           network which produces series
+    {seriesgenre}             series genre
+    {seriesrating}            series thetvdb rating
+    {seriesstatus}            status of series (running / finished)
+    {episodetitle}            title of episode
+    {episodenumber}           number of episode
+    {episodeseason}           season of episode
+    {episodefirstaired}       first aired date of episode
+    {episodegueststars}       guest stars of episode
+    {episodeoverview}         episode overview
+    {episoderating}           user rating for episode
+    {episodeimagewidth}       episode image width
+    {episodeimageheight}      episode image height
+    {episodeimagepath}        episode image path
+    {seasonposterwidth}       episode season poster width
+    {seasonposterheight}      episode season poster height
+    {seasonposterpath}        episode season poster path
+    {seriesposter1width}      width of 1st poster
+    {seriesposter1height}     height of 1st poster
+    {seriesposter1path}       path of 1st poster
+    {seriesposter2width}      width of 2nd poster
+    {seriesposter2height}     height of 2nd poster
+    {seriesposter2path}       path of 2nd poster
+    {seriesposter3width}      width of 3rd poster
+    {seriesposter3height}     height of 3rd poster
+    {seriesposter3path}       path of 3rd poster
+    {seriesfanart1width}      width of 1st fanart
+    {seriesfanart1height}     height of 1st fanart
+    {seriesfanart1path}       path of 1st fanart
+    {seriesfanart2width}      width of 2nd fanart
+    {seriesfanart2height}     height of 2nd fanart
+    {seriesfanart2path}       path of 2nd fanart
+    {seriesfanart3width}      width of 3rd fanart
+    {seriesfanart3height}     height of 3rd fanart
+    {seriesfanart3path}       path of 3rd fanart
+    {seriesbanner1width}      width of 1st banner
+    {seriesbanner1height}     height of 1st banner
+    {seriesbanner1path}       path of 1st banner
+    {seriesbanner2width}      width of 2nd banner
+    {seriesbanner2height}     height of 2nd banner
+    {seriesbanner2path}       path of 2nd banner
+    {seriesbanner3width}      width of 3rd banner
+    {seriesbanner3height}     height of 3rd banner
+    {seriesbanner3path}       path of 3rd fanart
+    {actors[]}                array with movie actors
+    {actors[name]}            real name of actor
+    {actors[role]}            actor role
+    {actors[thumb]}           absolute path of scraped actor thumb
+    {actors[thumbwidth]}      width of scraped actor thumb
+    {actors[thumbheight]}     height of scraped actor thumb    
+    -->
+    <onpause delay="60" fadetime="{fadeTime}">
+        <area x="0" y="0" width="100%" height="100%" layer="7">
+            <fill color="{clrTransBlackDark}" />
+        </area>
+    </onpause>
+
+    <onpausemodeonly delay="20" fadetime="{fadeTime}">
+        <area x="0" y="0" width="100%" height="100%" layer="7">
+            <fill color="{clrTransBlackDark}" />
+        </area>
+        <area x="0" y="0" width="100%" height="100%" layer="6">
+            <drawtext align="center" valign="center" font="{vdrOsd}" fontsize="25%" color="{clrWhite}" text="{tr(pause)}" />
+            <drawimage condition="{isseries}" imagetype="image" path="{seriesbanner1path}" align="center" y="10" width="{areawidth}*0.5" height="{areawidth} * 0.5 * {seriesbanner1height} / {seriesbanner1width}"/>
+            <drawimage condition="{ismovie}" imagetype="image" path="{posterpath}" x="10" y="10" width="{areaheight} * 0.4  * {posterwidth} / {posterheight}" height="{areaheight} * 0.4"/>
+        </area>
+    </onpausemodeonly>
 </displayreplay>

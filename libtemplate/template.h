@@ -32,6 +32,7 @@ enum eViewType {
 class cTemplate {
 private:
     eViewType viewType;
+    void CachePixmapImages(cTemplatePixmap *pix);
     void CacheImage(cTemplateFunction *func);
 protected:
     cGlobals *globals;

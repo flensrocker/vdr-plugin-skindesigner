@@ -11,6 +11,7 @@
         {monthname}         Month, three letter abbrevation
         {year}              Year (4 digits)
         {channelname}       Name of channel which is set for the timer
+        {channellogoexists} true if a channel logo exists 
         {channelid}         ID of channel which is set for the timer (for dispalying channel logo)
         {channelnumber}     Number of channel which is set for the timer
         {eventtitle}        Title of corresponding event
@@ -40,6 +41,7 @@
         {monthname}         Month, three letter abbrevation
         {year}              Year (4 digits)#
         {channelname}       Name of channel which is set for the timer
+        {channellogoexists} true if a channel logo exists 
         {channelid}         ID of channel which is set for the timer (for dispalying channel logo)
         {channelnumber}     Number of channel which is set for the timer
         {eventtitle}        Title of corresponding event

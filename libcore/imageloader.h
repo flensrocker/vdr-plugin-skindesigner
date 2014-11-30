@@ -3,8 +3,9 @@
 
 #include <cairo.h>
 #include <librsvg/rsvg.h>
-#ifndef LIBRSVG_VERSION // Workaround for librsvg < 2.36.2
+#ifndef LIBRSVG_CHECK_VERSION // Workaround for librsvg < 2.36.2
     #include <librsvg/rsvg-cairo.h>
+    #include <librsvg/librsvg-features.h>
 #endif
 #include <jpeglib.h>
 #include <setjmp.h>
@@ -36,6 +37,10 @@ private:
 };
 
 // Image importer for SVG
+#if !LIBRSVG_CHECK_VERSION(2, 36, 0)
+    #error librsvg version 2.36.0 or above required!
+#endif
+
 class cImageImporterSVG : public cImageImporter {
 public:
     cImageImporterSVG();
@@ -43,6 +48,7 @@ public:
     bool LoadImage(const char *path);
     void DrawToCairo(cairo_t *cr);
     void GetImageSize(int &width, int &height);
+    static void InitLibRSVG();
 private:
     RsvgHandle *handle;
 };

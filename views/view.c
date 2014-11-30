@@ -73,7 +73,7 @@ void cView::Stop(void) {
 void cView::DrawViewElement(eViewElement ve, map <string,string> *stringTokens, map <string,int> *intTokens, map < string, vector< map< string, string > > > *loopTokens) {
     //setting correct ViewElement, depending which constructor was used
     cTemplateViewElement *viewElement;
-    if (tmplItem && ve == veMenuCurrentItemDetail) {
+    if (tmplItem && (ve == veMenuCurrentItemDetail || ve == veOnPause)) {
         viewElement = tmplItem;
     } else if (tmplView) {
         viewElement = tmplView->GetViewElement(ve);
@@ -84,7 +84,6 @@ void cView::DrawViewElement(eViewElement ve, map <string,string> *stringTokens, 
     if (viewElement->DebugTokens()) {
         DebugTokens(tmplView ? (tmplView->GetViewElementName(ve)) : "current view", stringTokens, intTokens, loopTokens);
     }
-
     //iterate through pixmaps of viewelement
     int pixCurrent = viewElement->GetPixOffset();
     if (pixCurrent < 0)

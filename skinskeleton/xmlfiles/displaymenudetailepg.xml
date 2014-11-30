@@ -17,6 +17,7 @@
     {vps}                     vps description string
     {channelname}             Channelname of event
     {channelnumber}           Channelnumber of event
+    {channellogoexists}       true if a channel logo exists 
     {channelid}               ChannelID as path to display channel logo
     {ismovie}                 true if event is scraped as a movie
     {isseries}                true if event is scraped as a series
@@ -51,6 +52,7 @@
     {durationhours}           duration, full hours
     {durationminutes}         duration, rest of minutes
     {vps}                     vps description string
+    {channellogoexists}       true if a channel logo exists 
     {channelid}               ChannelID as path to display channel logo
     {hasreruns}               true if reruns of this event are found
     {reruns[]}                array with reruns

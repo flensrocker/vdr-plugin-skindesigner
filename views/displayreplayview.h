@@ -3,9 +3,11 @@
 
 #include "../libtemplate/template.h"
 #include "view.h"
+#include "displayreplayonpauseview.h"
 
 class cDisplayReplayView : public cView {
 private:
+    cDisplayReplayOnPauseView *onPauseView;
     cString lastDate;
     int numMarksLast;
     int *lastMarks;
@@ -29,6 +31,8 @@ public:
     void DrawControlIcons(bool play, bool forward, int speed, bool modeOnly);
     void DrawJump(const char *jump);
     void DrawMessage(eMessageType type, const char *text);
+    void DrawOnPause(bool modeOnly);
+    void ClearOnPause(void);
     void DoFadeIn(void) { Start(); };
     void Flush(void) { DoFlush(); };
 };

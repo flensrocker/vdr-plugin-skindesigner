@@ -12,8 +12,8 @@
 
 class cSkindesignerOsdItem : public cOsdItem {
 private:
-	cSDDisplayMenu *sdDisplayMenu;
-	map < string, string > stringTokens;
+    cSDDisplayMenu *sdDisplayMenu;
+    map < string, string > stringTokens;
     map < string, int > intTokens;
     map < string, vector< map< string, string > > > loopTokens;
 protected:
@@ -22,9 +22,9 @@ public:
     cSkindesignerOsdItem(const char *Text, eOSState State = osUnknown, bool Selectable = true);
     virtual ~cSkindesignerOsdItem();
     virtual void SetMenuItem(cSkinDisplayMenu *DisplayMenu, int Index, bool Current, bool Selectable);
-	void SetDisplayMenu(cSDDisplayMenu *sdDisplayMenu) { this->sdDisplayMenu = sdDisplayMenu; };
+    void SetDisplayMenu(cSDDisplayMenu *sdDisplayMenu) { this->sdDisplayMenu = sdDisplayMenu; };
     void AddStringToken(string key, string value);
-	void AddIntToken(string key, int value);
+    void AddIntToken(string key, int value);
     void AddLoopToken(string loopName, map<string, string> &tokens);
 };
 
@@ -34,16 +34,16 @@ private:
     bool init;
     bool displayText;
     string pluginName;
-	cSDDisplayMenu *sdDisplayMenu;
+    cSDDisplayMenu *sdDisplayMenu;
     string text;
     map < string, string > stringTokens;
     map < string, int > intTokens;
     map < string, vector< map< string, string > > > loopTokens;
-	bool SetSkinDesignerDisplayMenu(void);
+    bool SetSkinDesignerDisplayMenu(void);
 protected:
     void ClearTokens(void);
     void SetPluginName(string name) {pluginName = name; };
-	void SetPluginMenu(int menu, eMenuType type);
+    void SetPluginMenu(int menu, eMenuType type);
     void SetText(string text) { this->text = text; };
     void AddStringToken(string key, string value);
     void AddIntToken(string key, int value);

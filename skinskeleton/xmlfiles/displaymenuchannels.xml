@@ -4,6 +4,7 @@
         {nummenuitem}             number of item in list, starts with 1
         {number}                  number of the displayed channel
         {name}                    name of the displayed channel
+        {channellogoexists}       true if a channel logo exists 
         {channelid}               ChannelID as path to display channel logo
         {transponder}             Transponder of channel
         {frequency}               Frequency of channel
@@ -30,6 +31,7 @@
         {menuitemheight}                height of according menu item
         {number}                        number of the displayed channel
         {name}                          name of the displayed channel
+        {channellogoexists}             true if a channel logo exists 
         {channelid}                     ChannelID as path to display channel logo
         {transponder}                   Transponder of channel
         {frequency}                     Frequency of channel

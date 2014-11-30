@@ -4,9 +4,10 @@
 #include <list>
 #include "../libtemplate/template.h"
 #include "view.h"
+#include "viewhelpers.h"
 #include "displaymenutabview.h"
 
-class cDisplayMenuDetailView : public cView {
+class cDisplayMenuDetailView : public cView, public cViewHelpers {
 private:
     bool detailViewInit;
     bool isPluginTextView;
@@ -21,7 +22,6 @@ private:
     map < string, int > intTokens;
     map < string, vector< map< string, string > > > loopTokens;
     void SetTokens(void);
-    void SetScraperTokens(void);
     void InitTabs(void);
     bool LoadReruns(vector< map< string, string > > *reruns);
     void LoadRecordingInformation(void);

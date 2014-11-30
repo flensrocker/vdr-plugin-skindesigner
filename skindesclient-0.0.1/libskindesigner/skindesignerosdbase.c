@@ -4,11 +4,11 @@
 * cSkindesignerOsdItem
 **********************************************************************/
 cSkindesignerOsdItem::cSkindesignerOsdItem(eOSState State) : cOsdItem(State) {
-	sdDisplayMenu = NULL;
+    sdDisplayMenu = NULL;
 }
 
 cSkindesignerOsdItem::cSkindesignerOsdItem(const char *Text, eOSState State, bool Selectable) : cOsdItem(Text, State, Selectable) {
-	sdDisplayMenu = NULL;
+    sdDisplayMenu = NULL;
 }  
 
 cSkindesignerOsdItem::~cSkindesignerOsdItem() {
@@ -16,33 +16,33 @@ cSkindesignerOsdItem::~cSkindesignerOsdItem() {
 }
 
 void cSkindesignerOsdItem::SetMenuItem(cSkinDisplayMenu *DisplayMenu, int Index, bool Current, bool Selectable) {
-	if (sdDisplayMenu) {
-		if (!sdDisplayMenu->SetItemPlugin(&stringTokens, &intTokens, &loopTokens, Index, Current, Selectable)) {
-			DisplayMenu->SetItem(Text(), Index, Current, Selectable);
-		}
-	} else {
-		DisplayMenu->SetItem(Text(), Index, Current, Selectable);
-	}
+    if (sdDisplayMenu) {
+        if (!sdDisplayMenu->SetItemPlugin(&stringTokens, &intTokens, &loopTokens, Index, Current, Selectable)) {
+            DisplayMenu->SetItem(Text(), Index, Current, Selectable);
+        }
+    } else {
+        DisplayMenu->SetItem(Text(), Index, Current, Selectable);
+    }
 }
 
 void cSkindesignerOsdItem::AddStringToken(string key, string value) {
-	stringTokens.insert(pair<string,string>(key, value));
+    stringTokens.insert(pair<string,string>(key, value));
 }
 
 void cSkindesignerOsdItem::AddIntToken(string key, int value) {
-	intTokens.insert(pair<string,int>(key, value));
+    intTokens.insert(pair<string,int>(key, value));
 }
 
 void cSkindesignerOsdItem::AddLoopToken(string loopName, map<string, string> &tokens) {
-	map<string, vector<map<string, string> > >::iterator hitLoop = loopTokens.find(loopName);
-	if (hitLoop == loopTokens.end()) {
-		vector<map<string, string> > tokenVector;
-		tokenVector.push_back(tokens);
-		loopTokens.insert(pair<string, vector<map<string, string> > >(loopName, tokenVector));
-	} else {
-		vector<map<string, string> > *tokenVector = &hitLoop->second;
-		tokenVector->push_back(tokens);
-	}
+    map<string, vector<map<string, string> > >::iterator hitLoop = loopTokens.find(loopName);
+    if (hitLoop == loopTokens.end()) {
+        vector<map<string, string> > tokenVector;
+        tokenVector.push_back(tokens);
+        loopTokens.insert(pair<string, vector<map<string, string> > >(loopName, tokenVector));
+    } else {
+        vector<map<string, string> > *tokenVector = &hitLoop->second;
+        tokenVector->push_back(tokens);
+    }
 }
 
 
@@ -50,12 +50,12 @@ void cSkindesignerOsdItem::AddLoopToken(string loopName, map<string, string> &to
 * cSkindesignerOsdMenu
 **********************************************************************/
 cSkindesignerOsdMenu::cSkindesignerOsdMenu(const char *Title, int c0, int c1, int c2, int c3, int c4) : cOsdMenu(Title, c0, c1, c2, c3, c4) {
-	init = true;
+    init = true;
     displayText = false;
-	sdDisplayMenu = NULL;
-	pluginName = "";
-	SetMenuCategory(mcPlugin);
-	SetSkinDesignerDisplayMenu();
+    sdDisplayMenu = NULL;
+    pluginName = "";
+    SetMenuCategory(mcPlugin);
+    SetSkinDesignerDisplayMenu();
 }
 
 cSkindesignerOsdMenu::~cSkindesignerOsdMenu() {
@@ -63,56 +63,56 @@ cSkindesignerOsdMenu::~cSkindesignerOsdMenu() {
 }
 
 void cSkindesignerOsdMenu::SetPluginMenu(int menu, eMenuType type) {
-	if (type == mtList)
-		displayText = false;
-	else if (type == mtText)
-		displayText = true;
+    if (type == mtList)
+        displayText = false;
+    else if (type == mtText)
+        displayText = true;
 
-	if (sdDisplayMenu) {
-		sdDisplayMenu->SetPluginMenu(pluginName, menu, type, init);
-	}
+    if (sdDisplayMenu) {
+        sdDisplayMenu->SetPluginMenu(pluginName, menu, type, init);
+    }
     init = false;
 }
 
 bool cSkindesignerOsdMenu::SetSkinDesignerDisplayMenu(void) {
-	static cPlugin *pSkinDesigner = cPluginManager::GetPlugin("skindesigner");
-  	if (!pSkinDesigner) {
-    	return false;	
-  	}
-  	GetDisplayMenu call;
-  	bool ok = pSkinDesigner->Service("GetDisplayMenu", &call);
-  	if (ok && call.displayMenu) {
-  		sdDisplayMenu = call.displayMenu;
-  		return true;
-  	}
-  	return false;
+    static cPlugin *pSkinDesigner = cPluginManager::GetPlugin("skindesigner");
+    if (!pSkinDesigner) {
+        return false;   
+    }
+    GetDisplayMenu call;
+    bool ok = pSkinDesigner->Service("GetDisplayMenu", &call);
+    if (ok && call.displayMenu) {
+        sdDisplayMenu = call.displayMenu;
+        return true;
+    }
+    return false;
 }
 
 void cSkindesignerOsdMenu::ClearTokens(void) {
-	text = "";
+    text = "";
     stringTokens.clear();
     intTokens.clear();
     loopTokens.clear();
 }
 
 void cSkindesignerOsdMenu::AddStringToken(string key, string value) {
-	stringTokens.insert(pair<string,string>(key, value));
+    stringTokens.insert(pair<string,string>(key, value));
 }
 
 void cSkindesignerOsdMenu::AddIntToken(string key, int value) {
-	intTokens.insert(pair<string,int>(key, value));
+    intTokens.insert(pair<string,int>(key, value));
 }
 
 void cSkindesignerOsdMenu::AddLoopToken(string loopName, map<string, string> &tokens) {
-	map<string, vector<map<string, string> > >::iterator hitLoop = loopTokens.find(loopName);
-	if (hitLoop == loopTokens.end()) {
-		vector<map<string, string> > tokenVector;
-		tokenVector.push_back(tokens);
-		loopTokens.insert(pair<string, vector<map<string, string> > >(loopName, tokenVector));
-	} else {
-		vector<map<string, string> > *tokenVector = &hitLoop->second;
-		tokenVector->push_back(tokens);
-	}
+    map<string, vector<map<string, string> > >::iterator hitLoop = loopTokens.find(loopName);
+    if (hitLoop == loopTokens.end()) {
+        vector<map<string, string> > tokenVector;
+        tokenVector.push_back(tokens);
+        loopTokens.insert(pair<string, vector<map<string, string> > >(loopName, tokenVector));
+    } else {
+        vector<map<string, string> > *tokenVector = &hitLoop->second;
+        tokenVector->push_back(tokens);
+    }
 }
 
 void cSkindesignerOsdMenu::TextKeyLeft(void) {
@@ -140,9 +140,9 @@ void cSkindesignerOsdMenu::TextKeyDown(void) {
 }
 
 void cSkindesignerOsdMenu::Display(void) {
-	if (displayText) {
-		if (sdDisplayMenu) {
-			if (sdDisplayMenu->SetPluginText(&stringTokens, &intTokens, &loopTokens)) {
+    if (displayText) {
+        if (sdDisplayMenu) {
+            if (sdDisplayMenu->SetPluginText(&stringTokens, &intTokens, &loopTokens)) {
                 esyslog("skindesclient: template found");
                 sdDisplayMenu->Flush();
             } else {
@@ -151,19 +151,19 @@ void cSkindesignerOsdMenu::Display(void) {
                 DisplayMenu()->SetText(text.c_str(), false);
                 DisplayMenu()->Flush();
             }
-		} else {
+        } else {
             DisplayMenu()->Clear();
-			DisplayMenu()->SetText(text.c_str(), false);
+            DisplayMenu()->SetText(text.c_str(), false);
             DisplayMenu()->Flush();
-		}
+        }
         return;
-	}
-	if (sdDisplayMenu) {
-		for (cOsdItem *item = First(); item; item = Next(item)) {
-	        cSkindesignerOsdItem *sdItem = dynamic_cast<cSkindesignerOsdItem*>(item);
-	        if (sdItem)
-				sdItem->SetDisplayMenu(sdDisplayMenu);
-		}
-	}
-	cOsdMenu::Display();
+    }
+    if (sdDisplayMenu) {
+        for (cOsdItem *item = First(); item; item = Next(item)) {
+            cSkindesignerOsdItem *sdItem = dynamic_cast<cSkindesignerOsdItem*>(item);
+            if (sdItem)
+                sdItem->SetDisplayMenu(sdDisplayMenu);
+        }
+    }
+    cOsdMenu::Display();
 }

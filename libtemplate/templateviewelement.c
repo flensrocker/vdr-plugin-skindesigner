@@ -118,6 +118,13 @@ cTemplateFunction *cTemplateViewElement::GetFunction(string name) {
     return NULL;
 }
 
+bool cTemplateViewElement::DebugTokens(void) {
+    if (!parameters)
+        return false;
+    return parameters->DoDebug();
+}
+
+
 void cTemplateViewElement::Debug(void) {
     esyslog("skindesigner: viewelement container size x: %d, y: %d, width: %d, height %d", containerX, containerY, containerWidth, containerHeight);
     if (parameters)

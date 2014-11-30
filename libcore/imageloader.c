@@ -184,6 +184,12 @@ void cImageImporterSVG::GetImageSize(int &width, int &height) {
     }
 }
 
+void cImageImporterSVG::InitLibRSVG() {
+    #if !GLIB_CHECK_VERSION(2, 35, 0)
+        g_type_init();
+    #endif
+}
+
 //
 // Image importer for JPG
 //

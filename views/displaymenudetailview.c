@@ -127,7 +127,9 @@ void cDisplayMenuDetailView::SetTokens(void) {
         intTokens.insert(pair<string, int>("daynumeric", sStartTime->tm_mday));
         intTokens.insert(pair<string, int>("month", sStartTime->tm_mon+1));
 
-        stringTokens.insert(pair<string,string>("channelid", *(event->ChannelID().ToString())));
+        string channelID = *(event->ChannelID().ToString());
+        stringTokens.insert(pair<string,string>("channelid", channelID));
+        intTokens.insert(pair<string, int>("channellogoexists", imgCache->LogoExists(channelID)));
 
         bool isRunning = false;
         time_t now = time(NULL);
@@ -153,7 +155,7 @@ void cDisplayMenuDetailView::SetTokens(void) {
 
         intTokens.insert(pair<string,int>("hasreruns", hasReruns));
 
-        SetScraperTokens();
+        SetScraperTokens(event, recording, stringTokens, intTokens, loopTokens);
         SetEpgPictures(event->EventID());
 
     } else if (recording) {
@@ -205,7 +207,7 @@ void cDisplayMenuDetailView::SetTokens(void) {
             stringTokens.insert(pair<string,string>("durationeventminutes", ""));
         }
         LoadRecordingInformation();
-        SetScraperTokens();
+        SetScraperTokens(event, recording, stringTokens, intTokens, loopTokens);
         SetRecordingImages(recording->FileName());
     } else if (text) {
         stringTokens.insert(pair<string,string>("text", text));
@@ -213,212 +215,6 @@ void cDisplayMenuDetailView::SetTokens(void) {
         intTokens.insert(pair<string,int>("running", false));
         intTokens.insert(pair<string,int>("hasreruns", false));
     }
-}
-
-void cDisplayMenuDetailView::SetScraperTokens(void) {
-    static cPlugin *pScraper = GetScraperPlugin();
-    if (!pScraper || (!event && !recording)) {
-        intTokens.insert(pair<string,int>("ismovie", false));
-        intTokens.insert(pair<string,int>("isseries", false));
-        return;
-    }
-
-    ScraperGetEventType getType;
-    getType.event = event;
-    getType.recording = recording;
-    if (!pScraper->Service("GetEventType", &getType)) {
-        intTokens.insert(pair<string,int>("ismovie", false));
-        intTokens.insert(pair<string,int>("isseries", false));
-        return;        
-    }
-
-    if (getType.type == tMovie) {
-        cMovie movie;
-        movie.movieId = getType.movieId;
-        pScraper->Service("GetMovie", &movie);
-        intTokens.insert(pair<string,int>("ismovie", true));
-        intTokens.insert(pair<string,int>("isseries", false));
-
-        stringTokens.insert(pair<string,string>("movietitle", movie.title));
-        stringTokens.insert(pair<string,string>("movieoriginalTitle", movie.originalTitle));
-        stringTokens.insert(pair<string,string>("movietagline", movie.tagline));
-        stringTokens.insert(pair<string,string>("movieoverview", movie.overview));
-        stringTokens.insert(pair<string,string>("moviegenres", movie.genres));
-        stringTokens.insert(pair<string,string>("moviehomepage", movie.homepage));
-        stringTokens.insert(pair<string,string>("moviereleasedate", movie.releaseDate));
-        stringstream pop;
-        pop << movie.popularity;
-        stringTokens.insert(pair<string,string>("moviepopularity", pop.str()));
-        stringstream vote;
-        vote << movie.voteAverage;
-        stringTokens.insert(pair<string,string>("movievoteaverage", pop.str()));
-        stringTokens.insert(pair<string,string>("posterpath", movie.poster.path));
-        stringTokens.insert(pair<string,string>("fanartpath", movie.fanart.path));
-        stringTokens.insert(pair<string,string>("collectionposterpath", movie.collectionPoster.path));
-        stringTokens.insert(pair<string,string>("collectionfanartpath", movie.collectionFanart.path));
-
-        intTokens.insert(pair<string,int>("movieadult", movie.adult));
-        intTokens.insert(pair<string,int>("moviebudget", movie.budget));
-        intTokens.insert(pair<string,int>("movierevenue", movie.revenue));
-        intTokens.insert(pair<string,int>("movieruntime", movie.runtime));
-        intTokens.insert(pair<string,int>("posterwidth", movie.poster.width));
-        intTokens.insert(pair<string,int>("posterheight", movie.poster.height));
-        intTokens.insert(pair<string,int>("fanartwidth", movie.fanart.width));
-        intTokens.insert(pair<string,int>("fanartheight", movie.fanart.height));
-        intTokens.insert(pair<string,int>("collectionposterwidth", movie.collectionPoster.width));
-        intTokens.insert(pair<string,int>("collectionposterheight", movie.collectionPoster.height));
-        intTokens.insert(pair<string,int>("collectionfanartwidth", movie.collectionFanart.width));
-        intTokens.insert(pair<string,int>("collectionfanartheight", movie.collectionFanart.height));
-
-        vector< map< string, string > > actors;
-        for (vector<cActor>::iterator act = movie.actors.begin(); act != movie.actors.end(); act++) {
-            map< string, string > actor;
-            actor.insert(pair<string, string>("actors[name]", (*act).name));
-            actor.insert(pair<string, string>("actors[role]", (*act).role));
-            actor.insert(pair<string, string>("actors[thumb]", (*act).actorThumb.path));
-            stringstream actWidth, actHeight;
-            actWidth << (*act).actorThumb.width;
-            actHeight << (*act).actorThumb.height;
-            actor.insert(pair<string, string>("actors[thumbwidth]", actWidth.str()));
-            actor.insert(pair<string, string>("actors[thumbheight]", actHeight.str()));
-            actors.push_back(actor);
-        }
-        loopTokens.insert(pair<string, vector< map< string, string > > >("actors", actors));
-
-    } else if (getType.type == tSeries) {
-        cSeries series;
-        series.seriesId = getType.seriesId;
-        series.episodeId = getType.episodeId;
-        pScraper->Service("GetSeries", &series);
-        intTokens.insert(pair<string,int>("ismovie", false));
-        intTokens.insert(pair<string,int>("isseries", true));
-        //Series Basics
-        stringTokens.insert(pair<string,string>("seriesname", series.name));
-        stringTokens.insert(pair<string,string>("seriesoverview", series.overview));
-        stringTokens.insert(pair<string,string>("seriesfirstaired", series.firstAired));
-        stringTokens.insert(pair<string,string>("seriesnetwork", series.network));
-        stringTokens.insert(pair<string,string>("seriesgenre", series.genre));
-        stringstream rating;
-        rating << series.rating;
-        stringTokens.insert(pair<string,string>("seriesrating", rating.str()));
-        stringTokens.insert(pair<string,string>("seriesstatus", series.status));
-        //Episode Information
-        intTokens.insert(pair<string,int>("episodenumber", series.episode.number));
-        intTokens.insert(pair<string,int>("episodeseason", series.episode.season));
-        stringTokens.insert(pair<string,string>("episodetitle", series.episode.name));
-        stringTokens.insert(pair<string,string>("episodefirstaired", series.episode.firstAired));
-        stringTokens.insert(pair<string,string>("episodegueststars", series.episode.guestStars));
-        stringTokens.insert(pair<string,string>("episodeoverview", series.episode.overview));
-        stringstream eprating;
-        eprating << series.episode.rating;
-        stringTokens.insert(pair<string,string>("episoderating", eprating.str()));
-        intTokens.insert(pair<string,int>("episodeimagewidth", series.episode.episodeImage.width));
-        intTokens.insert(pair<string,int>("episodeimageheight", series.episode.episodeImage.height));
-        stringTokens.insert(pair<string,string>("episodeimagepath", series.episode.episodeImage.path));
-        //Seasonposter
-        intTokens.insert(pair<string,int>("seasonposterwidth", series.seasonPoster.width));
-        intTokens.insert(pair<string,int>("seasonposterheight", series.seasonPoster.height));
-        stringTokens.insert(pair<string,string>("seasonposterpath", series.seasonPoster.path));
-
-        //Posters
-        int current = 1;
-        for(vector<cTvMedia>::iterator poster = series.posters.begin(); poster != series.posters.end(); poster++) {
-            stringstream labelWidth, labelHeight, labelPath;
-            labelWidth << "seriesposter" << current << "width";
-            labelHeight << "seriesposter" << current << "height";
-            labelPath << "seriesposter" << current << "path";
-            
-            intTokens.insert(pair<string,int>(labelWidth.str(), (*poster).width));
-            intTokens.insert(pair<string,int>(labelHeight.str(), (*poster).height));
-            stringTokens.insert(pair<string,string>(labelPath.str(), (*poster).path));
-            current++;
-        }
-        if (current < 3) {
-            for (; current < 4; current++) {
-                stringstream labelWidth, labelHeight, labelPath;
-                labelWidth << "seriesposter" << current << "width";
-                labelHeight << "seriesposter" << current << "height";
-                labelPath << "seriesposter" << current << "path";
-                
-                intTokens.insert(pair<string,int>(labelWidth.str(), 0));
-                intTokens.insert(pair<string,int>(labelHeight.str(), 0));
-                stringTokens.insert(pair<string,string>(labelPath.str(), ""));
-            }
-        }
-
-        //Banners
-        current = 1;
-        for(vector<cTvMedia>::iterator banner = series.banners.begin(); banner != series.banners.end(); banner++) {
-            stringstream labelWidth, labelHeight, labelPath;
-            labelWidth << "seriesbanner" << current << "width";
-            labelHeight << "seriesbanner" << current << "height";
-            labelPath << "seriesbanner" << current << "path";
-            
-            intTokens.insert(pair<string,int>(labelWidth.str(), (*banner).width));
-            intTokens.insert(pair<string,int>(labelHeight.str(), (*banner).height));
-            stringTokens.insert(pair<string,string>(labelPath.str(), (*banner).path));
-            current++;
-        }
-        if (current < 3) {
-            for (; current < 4; current++) {
-                stringstream labelWidth, labelHeight, labelPath;
-                labelWidth << "seriesbanner" << current << "width";
-                labelHeight << "seriesbanner" << current << "height";
-                labelPath << "seriesbanner" << current << "path";
-                
-                intTokens.insert(pair<string,int>(labelWidth.str(), 0));
-                intTokens.insert(pair<string,int>(labelHeight.str(), 0));
-                stringTokens.insert(pair<string,string>(labelPath.str(), ""));
-            }
-        }
-        
-        //Fanarts
-        current = 1;
-        for(vector<cTvMedia>::iterator fanart = series.fanarts.begin(); fanart != series.fanarts.end(); fanart++) {
-            stringstream labelWidth, labelHeight, labelPath;
-            labelWidth << "seriesfanart" << current << "width";
-            labelHeight << "seriesfanart" << current << "height";
-            labelPath << "seriesfanart" << current << "path";
-            
-            intTokens.insert(pair<string,int>(labelWidth.str(), (*fanart).width));
-            intTokens.insert(pair<string,int>(labelHeight.str(), (*fanart).height));
-            stringTokens.insert(pair<string,string>(labelPath.str(), (*fanart).path));
-            current++;
-        }
-        if (current < 3) {
-            for (; current < 4; current++) {
-                stringstream labelWidth, labelHeight, labelPath;
-                labelWidth << "seriesfanart" << current << "width";
-                labelHeight << "seriesfanart" << current << "height";
-                labelPath << "seriesfanart" << current << "path";
-                
-                intTokens.insert(pair<string,int>(labelWidth.str(), 0));
-                intTokens.insert(pair<string,int>(labelHeight.str(), 0));
-                stringTokens.insert(pair<string,string>(labelPath.str(), ""));
-            }
-        }
-        
-        //Actors
-       vector< map< string, string > > actors;
-        for (vector<cActor>::iterator act = series.actors.begin(); act != series.actors.end(); act++) {
-            map< string, string > actor;
-            actor.insert(pair<string, string>("actors[name]", (*act).name));
-            actor.insert(pair<string, string>("actors[role]", (*act).role));
-            actor.insert(pair<string, string>("actors[thumb]", (*act).actorThumb.path));
-            stringstream actWidth, actHeight;
-            actWidth << (*act).actorThumb.width;
-            actHeight << (*act).actorThumb.height;
-            actor.insert(pair<string, string>("actors[thumbwidth]", actWidth.str()));
-            actor.insert(pair<string, string>("actors[thumbheight]", actHeight.str()));
-            actors.push_back(actor);
-        }
-        loopTokens.insert(pair<string, vector< map< string, string > > >("actors", actors));
-
-    } else {
-        intTokens.insert(pair<string,int>("ismovie", false));
-        intTokens.insert(pair<string,int>("isseries", false));        
-    }
-
 }
 
 void cDisplayMenuDetailView::InitTabs(void) {
@@ -864,7 +660,9 @@ void cDisplayMenuDetailView::DrawHeader(void) {
             headerStringTokens.insert(pair<string,string>("channelname", ""));            
             headerIntTokens.insert(pair<string, int>("channelnumber", 0));
         }
-        headerStringTokens.insert(pair<string,string>("channelid", *(event->ChannelID().ToString())));
+        string channelID = *(channel->GetChannelID().ToString());
+        headerStringTokens.insert(pair<string,string>("channelid", channelID));
+        headerIntTokens.insert(pair<string, int>("channellogoexists", imgCache->LogoExists(channelID)));
 
         bool isRunning = false;
         time_t now = time(NULL);

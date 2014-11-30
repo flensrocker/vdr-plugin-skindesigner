@@ -190,6 +190,10 @@
             <trans lang="en_EN">Volume</trans>
             <trans lang="de_DE">Lautstärke</trans>
         </token>
+        <token name="tr(pause)">
+            <trans lang="en_EN">Pause</trans>
+            <trans lang="de_DE">Pause</trans>
+        </token>
     </translations>
     <!--
     The three Fonts FontOSD, FontFix and FontSml configured in VDR

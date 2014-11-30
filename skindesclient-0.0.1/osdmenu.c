@@ -7,17 +7,17 @@
 #include "libskindesigner/skindesignerosdbase.h"
 
 enum eMenus {
-	meListMain,
+    meListMain,
     meListSub,
-	meDetail
+    meDetail
 };
 
 class cPlugOsdMenu : public cSkindesignerOsdMenu {
 private:
-	void SetMenu(int numItems, bool subfolder = false);
+    void SetMenu(int numItems, bool subfolder = false);
     void SetDetailView(int element);
 public:
-	cPlugOsdMenu(void);
+    cPlugOsdMenu(void);
     virtual ~cPlugOsdMenu();
     virtual eOSState ProcessKey(eKeys key);
 };
@@ -28,12 +28,12 @@ public:
 //***************************************************************************
 
 cPlugOsdMenu::cPlugOsdMenu(void) : cSkindesignerOsdMenu("Skindesigner Client") {
-	SetPluginName("skindesclient");
-	SetMenu(10);
+    SetPluginName("skindesclient");
+    SetMenu(10);
 }
 
 cPlugOsdMenu::~cPlugOsdMenu(void) {
-	
+    
 }
 
 eOSState cPlugOsdMenu::ProcessKey(eKeys key) {
