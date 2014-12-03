@@ -69,8 +69,9 @@ OBJS = $(PLUGIN).o \
        libcore/pixmapcontainer.o \
        libcore/fontmanager.o \
        libcore/imagecache.o \
-       libcore/helpers.o \
        libcore/imageloader.o \
+       libcore/imagecreator.o \
+       libcore/helpers.o \
        libcore/recfolderinfo.o \
        libcore/extrecinfo.o \
        libcore/timers.o \

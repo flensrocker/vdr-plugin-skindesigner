@@ -72,7 +72,7 @@ void cDesignerConfig::ReadSkins(void) {
             continue;
         skins.push_back(dirEntryName);
     }
-    dsyslog("skindesigner %d skins found in %s", skins.size(), *skinPath);
+    dsyslog("skindesigner %ld skins found in %s", skins.size(), *skinPath);
 }
 
 bool cDesignerConfig::GetSkin(string &skin) {

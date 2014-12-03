@@ -34,6 +34,7 @@ private:
     eViewType viewType;
     void CachePixmapImages(cTemplatePixmap *pix);
     void CacheImage(cTemplateFunction *func);
+    void CacheEllipse(cTemplateFunction *func);
 protected:
     cGlobals *globals;
     cTemplateView *rootView;

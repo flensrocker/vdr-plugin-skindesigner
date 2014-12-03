@@ -103,3 +103,5 @@ Version 0.0.7
 - fixed bug that global double vars are not working
 
 Version 0.0.8
+
+- drawing ellipses antialiased with Cairo 
