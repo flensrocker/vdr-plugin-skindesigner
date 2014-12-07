@@ -102,10 +102,7 @@ enum eOverflowType {
 };
 
 class cTemplateFunction {
-private:
-    static int nextId;
 protected:
-    int id;
     eFuncType type;
     bool debug;
     int containerX;                                                       //X of parent container
@@ -188,7 +185,6 @@ public:
     //Parse parameters with dynamically set Tokens
     bool ParseParameters(void);
     //Getter Functions
-    int GetId(void) { return id; };
     eFuncType GetType(void) { return type; };
     bool DoDebug(void) { return debug; };
     string GetParameter(eParamType type);

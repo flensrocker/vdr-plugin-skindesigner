@@ -190,6 +190,7 @@ void cSDDisplayMenu::SetItem(const char *Text, int Index, bool Current, bool Sel
     } else if (cat == mcSetup && rootView->SubViewAvailable()) {
         list->AddSetupMenuItem(Index, Text, Current, Selectable);        
     } else {
+        rootView->CorrectDefaultMenu();
         string *tabTexts = new string[MaxTabs];
         for (int i=0; i<MaxTabs; i++) {
             const char *s = GetTabbedText(Text, i);

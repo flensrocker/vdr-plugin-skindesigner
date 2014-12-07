@@ -636,17 +636,14 @@ void cView::DoDrawEllipse(int num, cTemplateFunction *func, int x0, int y0) {
     y += y0;
     int w = func->GetNumericParameter(ptWidth);
     int h = func->GetNumericParameter(ptHeight);
+    cRect size(x, y, w, h);
     tColor clr = func->GetColorParameter(ptColor);
     int quadrant = func->GetNumericParameter(ptQuadrant);
     if (quadrant < -4 || quadrant > 8) {
         esyslog("skindesigner: wrong quadrant %d for drawellipse, allowed values are from -4 to 8", quadrant);
         quadrant = 0;
     }
-    cImage *ellipse = imgCache->GetEllipse(func->GetId(), w, h, clr, quadrant);
-    if (ellipse) {
-        const cPoint point(x, y);
-        DrawImage(num, point, *ellipse);
-    }
+    DrawEllipse(num, size, clr, quadrant);
 }
 
 void cView::DoDrawSlope(int num, cTemplateFunction *func, int x0, int y0) {

@@ -104,4 +104,10 @@ Version 0.0.7
 
 Version 0.0.8
 
-- drawing ellipses antialiased with Cairo 
+- added {channelnumber} Token in displaymenuschedules
+- displaying default menu list if menu category is set to another category
+  but SetItem() is called
+
+Version 0.1.0
+
+- fixed display of color buttons in detailed views

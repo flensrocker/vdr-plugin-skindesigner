@@ -65,23 +65,24 @@ bool cDisplayMenuRootView::createOsd(void) {
 8  mcTimerEdit,
 9  mcRecording,
 10 mcRecordingInfo,
-11 mcPlugin,
-12 mcPluginSetup,
-13 mcSetup,
-14 mcSetupOsd,
-15 mcSetupEpg,
-16 mcSetupDvb,
-17 mcSetupLnb,
-18 mcSetupCam,
-19 mcSetupRecord,
-20 mcSetupReplay,
-21 mcSetupMisc,
-22 mcSetupPlugins,
-23 mcCommand,
-24 mcEvent,
-25 mcText,
-26 mcFolder,
-27 mcCam
+11 mcRecordingEdit,
+12 mcPlugin,
+13 mcPluginSetup,
+14 mcSetup,
+15 mcSetupOsd,
+16 mcSetupEpg,
+17 mcSetupDvb,
+18 mcSetupLnb,
+19 mcSetupCam,
+20 mcSetupRecord,
+21 mcSetupReplay,
+22 mcSetupMisc,
+23 mcSetupPlugins,
+24 mcCommand,
+25 mcEvent,
+26 mcText,
+27 mcFolder,
+28 mcCam
 */
 
 void cDisplayMenuRootView::SetMenu(eMenuCategory menuCat, bool menuInit) {
@@ -186,6 +187,7 @@ void cDisplayMenuRootView::SetMenu(eMenuCategory menuCat, bool menuInit) {
                 view = new cDisplayMenuView(subView, menuInit);
         }
         view->SetMenuCat(cat);
+        view->SetButtonTexts(buttonTexts);
         //Cleanup root view
         ClearRootView();
         if (isListView) {
@@ -199,6 +201,12 @@ void cDisplayMenuRootView::SetMenu(eMenuCategory menuCat, bool menuInit) {
             detailView = new cDisplayMenuDetailView(subView);
         }
         viewType = newViewType;
+    }
+}
+
+void cDisplayMenuRootView::CorrectDefaultMenu(void) {
+    if (viewType > svMenuDefault) {
+        SetMenu(mcUnknown, true);
     }
 }
 

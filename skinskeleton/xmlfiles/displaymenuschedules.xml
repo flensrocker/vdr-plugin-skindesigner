@@ -35,6 +35,7 @@
         {current}                 true if item is currently selected 
         {separator}               true if item is a list separator 
         {channelname}             Channel Name
+        {channelnumber}           Channel Number
         {channelid}               ChannelID as path to display channel logo
         {channellogoexists}       true if a channel logo exists 
         {whatson}                 true if menu "What's on" is displayed
@@ -67,6 +68,7 @@
         {durationhours}           duration, full hours
         {durationminutes}         duration, rest of minutes
         {channelname}             Channel Name
+        {channelnumber}           Channel Number
         {channelid}               ChannelID as path to display channel logo
         {channellogoexists}       true if a channel logo exists 
         {hasposter}               true if a scraped poster is available for this element

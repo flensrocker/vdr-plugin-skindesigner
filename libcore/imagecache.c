@@ -3,10 +3,9 @@
 #include <map>
 #include <fstream>
 #include <sys/stat.h>
-#include "imagecreator.h"
+#include "imagecache.h"
 #include "../config.h"
 #include "helpers.h"
-#include "imagecache.h"
 
 
 cMutex cImageCache::mutex;
@@ -301,37 +300,6 @@ cImage *cImageCache::GetSkinpart(string name, int width, int height) {
     return NULL;    
 }
 
-void cImageCache::CacheEllipse(int id, int width, int height, tColor color, int quadrant) {
-    esyslog("skindesigner: caching ellipse %d, w %d, h %d, color %x, quadrant %d", id, width, height, color, quadrant);
-    GetEllipse(id, width, height, color, quadrant);
-}
-
-cImage *cImageCache::GetEllipse(int id, int width, int height, tColor color, int quadrant) {
-    if (width < 1 || width > 1920 || height < 1 || height > 1080)
-        return NULL;
-    cMutexLock MutexLock(&mutex);
-    map<int, cImage*>::iterator hit = cairoImageCache.find(id);
-    if (hit != cairoImageCache.end()) {
-        return (cImage*)hit->second;
-    } else {
-        cImageCreator ic;
-        if (!ic.InitCairoImage(width, height))
-            return NULL;
-        ic.DrawEllipse(color, quadrant);
-        cImage *ellipse = ic.GetImage();
-        cairoImageCache.insert(pair<int, cImage*>(id, ellipse));
-        hit = cairoImageCache.find(id);
-        if (hit != cairoImageCache.end()) {
-            return (cImage*)hit->second;
-        }
-    }
-    return NULL;
-}
-
-/****************************************************************************************
-* PRIVATE FUNCTIONS
-****************************************************************************************/
-
 bool cImageCache::LoadIcon(eImageType type, string name) {
     cString subdir("");
     if (type == itMenuIcon)
@@ -393,17 +361,11 @@ void cImageCache::Clear(void) {
     }
     channelLogoCache.clear();
 
-    for(map<string, cImage*>::const_iterator it = skinPartsCache.begin(); it != skinPartsCache.end(); it++) {
+    for(map<std::string, cImage*>::const_iterator it = skinPartsCache.begin(); it != skinPartsCache.end(); it++) {
         cImage *img = (cImage*)it->second;
         delete img;
     }
     skinPartsCache.clear();
-
-    for(map<int, cImage*>::const_iterator it = cairoImageCache.begin(); it != cairoImageCache.end(); it++) {
-        cImage *img = (cImage*)it->second;
-        delete img;
-    }
-    cairoImageCache.clear();
 }
 
 void cImageCache::Debug(bool full) {

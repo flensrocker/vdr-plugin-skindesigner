@@ -168,6 +168,7 @@ void cDisplayMenuItemCurrentSchedulesView::Render(void) {
         stringTokens.insert(pair<string,string>("channelname", channel->Name() ? channel->Name() : ""));
         string channelID = *(channel->GetChannelID().ToString());
         stringTokens.insert(pair<string,string>("channelid", channelID));
+        intTokens.insert(pair<string, int>("channelnumber", channel->Number()));
         intTokens.insert(pair<string, int>("channellogoexists", imgCache->LogoExists(channelID)));
     }
 

@@ -335,6 +335,7 @@ void cDisplayMenuItemSchedulesView::SetTokens(void) {
         stringTokens.insert(pair<string,string>("channelname", channel->Name() ? channel->Name() : ""));
         string channelID = *(channel->GetChannelID().ToString());
         stringTokens.insert(pair<string,string>("channelid", channelID));
+        intTokens.insert(pair<string, int>("channelnumber", channel->Number()));
         intTokens.insert(pair<string, int>("channellogoexists", imgCache->LogoExists(channelID)));
         if (!event && !selectable) {
             stringTokens.insert(pair<string,string>("title", channel->Name() ? ParseSeparator(channel->Name()) : ""));
@@ -342,6 +343,7 @@ void cDisplayMenuItemSchedulesView::SetTokens(void) {
     } else {
         stringTokens.insert(pair<string,string>("channelname", ""));
         stringTokens.insert(pair<string,string>("channelid", ""));
+        intTokens.insert(pair<string, int>("channelnumber", 0));
         intTokens.insert(pair<string, int>("channellogoexists", 0));
     }
 }

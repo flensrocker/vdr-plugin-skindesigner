@@ -250,8 +250,6 @@ void cTemplate::CachePixmapImages(cTemplatePixmap *pix) {
     while(func = pix->GetNextFunction()) {
         if (func->GetType() == ftDrawImage) {
             CacheImage(func);
-        } else if (func->GetType() == ftDrawEllipse) {
-            CacheEllipse(func);
         }
     }
 }
@@ -280,13 +278,4 @@ void cTemplate::CacheImage(cTemplateFunction *func) {
         default:
             break;
     }
-}
-
-void cTemplate::CacheEllipse(cTemplateFunction *func) {
-    int id = func->GetId();
-    int w = func->GetNumericParameter(ptWidth);
-    int h = func->GetNumericParameter(ptHeight);
-    tColor clr = func->GetColorParameter(ptColor);
-    int quadrant = func->GetNumericParameter(ptQuadrant);
-    imgCache->CacheEllipse(id, w, h, clr, quadrant);
 }

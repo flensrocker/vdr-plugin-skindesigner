@@ -44,6 +44,7 @@ public:
     virtual ~cDisplayMenuRootView();
     bool createOsd(void);
     void SetMenu(eMenuCategory menuCat, bool menuInit);
+    void CorrectDefaultMenu(void);
     void SetPluginMenu(string name, int menu, int type);
     void SetTitle(const char *title);
     void SetChannel(const cChannel *channel) { view->SetChannel(channel); };

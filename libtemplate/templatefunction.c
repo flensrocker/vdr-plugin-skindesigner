@@ -6,10 +6,7 @@ using namespace std;
 
 // --- cTemplateFunction -------------------------------------------------------------
 
-int cTemplateFunction::nextId = 0;
-
-cTemplateFunction::cTemplateFunction(eFuncType type) {
-    id = nextId++;
+cTemplateFunction::cTemplateFunction(eFuncType type) { 
     this->type = type;
     debug = false;
     containerX = 0; 
