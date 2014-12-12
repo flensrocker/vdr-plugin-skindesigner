@@ -1030,6 +1030,7 @@ void cTemplateViewMenu::SetViewElements(void) {
     viewElementsAllowed.insert("systemload");
     viewElementsAllowed.insert("timers");
     viewElementsAllowed.insert("devices");
+    viewElementsAllowed.insert("currentschedule");
     viewElementsAllowed.insert("scrollbar");
     viewElementsAllowed.insert("detailheader");
     viewElementsAllowed.insert("tablabels");
@@ -1107,6 +1108,9 @@ string cTemplateViewMenu::GetViewElementName(eViewElement ve) {
             break;
         case veTimers:
             name = "Timers";
+            break;
+        case veCurrentSchedule:
+            name = "Current Schedule";
             break;
         case veDevices:
             name = "Devices";
@@ -1217,6 +1221,8 @@ void cTemplateViewMenu::AddPixmap(string sViewElement, cTemplatePixmap *pix, vec
         ve = veSystemLoad;
     } else if (!sViewElement.compare("timers")) {
         ve = veTimers;
+    } else if (!sViewElement.compare("currentschedule")) {
+        ve = veCurrentSchedule;
     } else if (!sViewElement.compare("devices")) {
         ve = veDevices;
     } else if (!sViewElement.compare("scrollbar")) {
@@ -1238,6 +1244,9 @@ void cTemplateViewMenu::AddPixmap(string sViewElement, cTemplatePixmap *pix, vec
     if (hit == viewElements.end()) {
         cTemplateViewElement *viewElement = new cTemplateViewElement();
         viewElement->SetParameters(viewElementattributes);
+        if (viewElement->DebugTokens()) {
+            dsyslog("skindesigner: activating token debugging for view element %s", sViewElement.c_str());
+        }
         viewElement->AddPixmap(pix);
         viewElements.insert(pair< eViewElement, cTemplateViewElement*>(ve, viewElement));
     } else {

@@ -111,3 +111,5 @@ Version 0.0.8
 Version 0.1.0
 
 - fixed display of color buttons in detailed views
+- fixed possible Nullpointer access in displaymenurootview 
+- added currentschedule viewelement in displaymenumain

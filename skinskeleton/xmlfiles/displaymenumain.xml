@@ -57,6 +57,28 @@
     <systemload>
     </systemload>
 
+    <!-- Available Variables currentschedule:
+    {title}                     Title of the current Schedule
+    {subtitle}                  Subtitle of the current Schedule
+    {start}                     Start of current Schedule in hh:mm
+    {stop}                      End of current Schedule in hh:mm 
+    {duration}                  Duration of current Schedule in min
+    {durationhours}             Duration, full hours
+    {minutes}                   Duration, rest of minutes
+    {elapsed}                   Elapsed time of current Schedule in min
+    {remaining}                 Remaining time of current Schedule in min
+    {hasPoster}                 true if poster is available
+    {posterpath}                Full Path of Poster to use in image path attribute
+    {posterwidth}               width of poster in pixel
+    {posterheight}              height of poster in pixel
+    {hasBanner}                 true if banner is available
+    {bannerpath}                Full Path of banner to use in image path attribute
+    {bannerwidth}               width of banner in pixel
+    {bannerheight}              height of banner in pixel
+    -->
+    <currentschedule>
+    </currentschedule>
+
     <menuitems x="0" y="0" orientation="vertical" width="100%" height="100%" align="center" numlistelements="8">
         <!-- Available Variables main menu listelement:
         {nummenuitem}             number of item in list, starts with 1

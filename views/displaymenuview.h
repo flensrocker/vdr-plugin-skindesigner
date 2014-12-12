@@ -38,6 +38,7 @@ private:
     void DrawDiscUsage(void);
     bool DrawLoad(void);
     bool DrawDevices(void);
+    void DrawCurrentSchedule(void);
 public:
     cDisplayMenuMainView(cTemplateView *tmplView, bool menuInit);
     virtual ~cDisplayMenuMainView();

@@ -390,6 +390,8 @@ cFont *cDisplayMenuRootView::GetTextAreaFont(void) {
 
 
 void cDisplayMenuRootView::Render(void) {
+    if (!view)
+        return;
     if (!view->DrawBackground()) {
         if (!defaultBackgroundDrawn) {
             defaultBackgroundDrawn = true;

@@ -514,7 +514,9 @@ bool cXmlParser::ParseSubView(xmlNodePtr node) {
         }
 
         if (subView->ValidViewElement((const char*)childNode->name)) {
+            xmlAttrPtr attr = childNode->properties;
             vector<pair<string, string> > attribs;
+            ParseAttributes(attr, childNode, attribs);
             ParseViewElement(childNode->name, childNode->xmlChildrenNode, attribs, subView);
         } else if (subView->ValidViewList((const char*)childNode->name)) {
             ParseViewList(childNode, subView);

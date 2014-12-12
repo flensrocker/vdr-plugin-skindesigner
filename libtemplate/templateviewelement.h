@@ -44,6 +44,7 @@ enum eViewElement {
     veDiscUsage,
     veSystemLoad,
     veTimers,
+    veCurrentSchedule,
     veMenuItem,
     veMenuCurrentItemDetail,
     veScrollbar,

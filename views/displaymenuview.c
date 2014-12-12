@@ -5,6 +5,7 @@
 #include "../config.h"
 #include "../libcore/helpers.h"
 #include "../libcore/timers.h"
+#include "../services/scraper2vdr.h"
 
 cDisplayMenuView::cDisplayMenuView(cTemplateView *tmplView, bool menuInit) : cView(tmplView) {
     if (menuInit)
@@ -228,6 +229,7 @@ cDisplayMenuMainView::~cDisplayMenuMainView() {
 void cDisplayMenuMainView::DrawStaticViewElements(void) {
     DrawTimers();
     DrawDiscUsage();
+    DrawCurrentSchedule();
 }
 
 bool cDisplayMenuMainView::DrawDynamicViewElements(void) {
@@ -401,6 +403,104 @@ bool cDisplayMenuMainView::DrawDevices(void) {
     DrawViewElement(veDevices, &stringTokens, &intTokens, &deviceLoopTokens);
     return true;
 }
+
+void cDisplayMenuMainView::DrawCurrentSchedule(void) {
+    if (!ViewElementImplemented(veCurrentSchedule)) {
+        return;
+    }
+
+    cDevice *device = cDevice::PrimaryDevice();
+    const cChannel *channel = NULL;
+    if (!device->Replaying() || device->Transferring()) {
+        channel = Channels.GetByNumber(device->CurrentChannel());
+    }
+    if (!channel)
+        return;
+
+    const cEvent *event = NULL;
+    cSchedulesLock SchedulesLock;
+    if (const cSchedules *Schedules = cSchedules::Schedules(SchedulesLock))
+        if (const cSchedule *Schedule = Schedules->GetSchedule(channel))
+            event = Schedule->GetPresentEvent();
+    if (!event)
+        return;
+
+    map < string, string > stringTokens;
+    map < string, int > intTokens;
+
+    stringTokens.insert(pair<string,string>("title", (event->Title())?event->Title():""));
+    stringTokens.insert(pair<string,string>("subtitle", (event->ShortText())?event->ShortText():""));
+    stringTokens.insert(pair<string,string>("start", *event->GetTimeString()));
+    stringTokens.insert(pair<string,string>("stop", *event->GetEndTimeString()));
+    intTokens.insert(pair<string,int>("duration", event->Duration() / 60));
+    intTokens.insert(pair<string,int>("durationhours", event->Duration() / 3600));
+    stringTokens.insert(pair<string,string>("durationminutes", *cString::sprintf("%.2d", (event->Duration() / 60)%60)));
+    intTokens.insert(pair<string,int>("elapsed", (int)round((time(NULL) - event->StartTime())/60)));
+    intTokens.insert(pair<string,int>("remaining", (int)round((event->EndTime() - time(NULL))/60)));
+
+    int mediaWidth = 0;
+    int mediaHeight = 0;
+    string mediaPath = "";
+    bool isBanner = false;
+    int posterWidth = 0;
+    int posterHeight = 0;
+    string posterPath = "";
+    bool hasPoster = false;
+    int bannerWidth = 0;
+    int bannerHeight = 0;
+    string bannerPath = "";
+    bool hasBanner = false;
+    static cPlugin *pScraper = GetScraperPlugin();
+    if (pScraper) {
+        ScraperGetPosterBanner call;
+        call.event = event;
+        if (pScraper->Service("GetPosterBanner", &call)) {
+            if ((call.type == tSeries) && call.banner.path.size() > 0) {
+                mediaWidth = call.banner.width;
+                mediaHeight = call.banner.height;
+                mediaPath = call.banner.path;
+                isBanner = true;
+                bannerWidth = mediaWidth;
+                bannerHeight = mediaHeight;
+                bannerPath = mediaPath;
+                hasBanner = true;
+                ScraperGetPoster callPoster;
+                callPoster.event = event;
+                callPoster.recording = NULL;
+                if (pScraper->Service("GetPoster", &callPoster)) {
+                    posterWidth = callPoster.poster.width;
+                    posterHeight = callPoster.poster.height;
+                    posterPath = callPoster.poster.path;
+                    hasPoster = true;
+                }
+            } else if (call.type == tMovie && call.poster.path.size() > 0 && call.poster.height > 0) {
+                mediaWidth = call.poster.width;
+                mediaHeight = call.poster.height;
+                mediaPath = call.poster.path;
+                posterWidth = call.poster.width;
+                posterHeight = call.poster.height;
+                posterPath = call.poster.path;
+                hasPoster = true;
+            }
+        }
+    }
+    intTokens.insert(pair<string,int>("mediawidth", mediaWidth));
+    intTokens.insert(pair<string,int>("mediaheight", mediaHeight));
+    intTokens.insert(pair<string,int>("isbanner", isBanner));
+    stringTokens.insert(pair<string,string>("mediapath", mediaPath));
+    intTokens.insert(pair<string,int>("posterwidth", posterWidth));
+    intTokens.insert(pair<string,int>("posterheight", posterHeight));
+    stringTokens.insert(pair<string,string>("posterpath", posterPath));
+    intTokens.insert(pair<string,int>("hasposter", hasPoster));
+    intTokens.insert(pair<string,int>("bannerwidth", bannerWidth));
+    intTokens.insert(pair<string,int>("bannerheight", bannerHeight));
+    stringTokens.insert(pair<string,string>("bannerpath", bannerPath));
+    intTokens.insert(pair<string,int>("hasbanner", hasBanner));
+
+    ClearViewElement(veCurrentSchedule);
+    DrawViewElement(veCurrentSchedule, &stringTokens, &intTokens);
+}
+
 /************************************************************************
 * cDisplayMenuSchedulesView
 ************************************************************************/

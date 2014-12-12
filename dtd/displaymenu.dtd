@@ -60,6 +60,11 @@
   debug CDATA #IMPLIED
 >
 
+<!ELEMENT currentschedule (area|areascroll)*>
+<!ATTLIST currentschedule
+  debug CDATA #IMPLIED
+>
+
 <!ELEMENT scrollbar (area|areascroll)*>
 <!ATTLIST scrollbar
   debug CDATA #IMPLIED
@@ -89,7 +94,7 @@
 >
 
 <!ELEMENT menumain (background | header | datetime | colorbuttons | scrollbar | timers | 
-                    discusage | devices | systemload | menuitems)*>
+                    discusage | devices | systemload | currentschedule | menuitems)*>
 <!ATTLIST menumain
   x CDATA #REQUIRED
   y CDATA #REQUIRED
